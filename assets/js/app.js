@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import ProjectView from './screens/ProjectView';
+import NewProject from './screens/NewProject';
 
 class App extends Component {
 	render() {
@@ -9,7 +10,7 @@ class App extends Component {
 			<BrowserRouter>
 			<Switch>
 				<Route exact path="/">
-					<h1>React App</h1>
+					<NewProject/>
 				</Route>
 				<Route path="/project">
 					<ProjectView />
