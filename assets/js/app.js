@@ -1,10 +1,21 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import ProjectView from './screens/ProjectView';
 
 class App extends Component {
 	render() {
 		return (
-			<Fragment>React app</Fragment>
+			<BrowserRouter>
+			<Switch>
+				<Route exact path="/">
+					<h1>React App</h1>
+				</Route>
+				<Route path="/project">
+					<ProjectView />
+				</Route>
+			</Switch>
+			</BrowserRouter>
 		)
 	}
 }
