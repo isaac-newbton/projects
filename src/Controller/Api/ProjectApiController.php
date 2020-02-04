@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller\Api;
 
+use App\Doctrine\UuidEncoder;
 use App\Entity\Project;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -11,7 +12,7 @@ class ProjectApiController extends AbstractController {
 	/**
 	 * @Route("/api/v1/project/create")
 	 */
-	public function createProject(Request $request){
+	public function createProject(Request $request, UuidEncoder $encoder){
 		$name = $request->get("name");
 		$dueDate = $request->get("dueDate");
 
@@ -21,7 +22,7 @@ class ProjectApiController extends AbstractController {
 		
 		$project = new Project();
 		$project->setName($name);
-		$project->setDueDate($dueDate);
+		if($dueDate) $project->setDueDate(new \DateTime($dueDate));
 
 
 		$em->persist($project);
@@ -29,11 +30,13 @@ class ProjectApiController extends AbstractController {
 		$em->refresh($project);
 
 		return new JsonResponse([
-			"id" => $project->getId(),
 			"name" => $project->getName(),
 			"uuid" => $project->getUuid(),
 			"viewUuid" => $project->getViewUuid(),
 			"editUuid" => $project->getEditUuid(),
+			"encodedUuid" => $encoder->encode($project->getUuid()),
+			"encodedViewUuid" => $encoder->encode($project->getViewUuid()),
+			"encodedEditUuid" => $encoder->encode($project->getEditUuid())
 		], 200);
 
 	}
