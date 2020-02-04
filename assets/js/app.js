@@ -12,7 +12,7 @@ class App extends Component {
 				<Route exact path="/">
 					<NewProject/>
 				</Route>
-				<Route path="/project/:decodedUuid">
+				<Route path="/project/:encodedUuid">
 					<ProjectScreen />
 				</Route>
 				<Route>

@@ -4,7 +4,7 @@ import { Row, Col } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 
 const ProjectScreen = props => {
-	const { decodedUuid } = useParams();
+	const { encodedUuid } = useParams();
 	const [isLoading, setIsLoading] = useState(false) // FIXME: make true when backend api is complete
 
 	// TODO: complete this fetch!
@@ -14,7 +14,7 @@ const ProjectScreen = props => {
 		fetch("http://127.0.0.1", {
 			method: "POST",
 			body: {
-				'decodedUuid' : decodedUuid
+				'encodedUuid' : encodedUuid
 			}
 		})
 		.then(resp => {
