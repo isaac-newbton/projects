@@ -8,8 +8,11 @@ import Form from 'react-bootstrap/Form'
 import FormGroup from 'react-bootstrap/FormGroup'
 import FormControl from 'react-bootstrap/FormControl'
 import Button from 'react-bootstrap/Button'
+import { useHistory } from 'react-router-dom'
 
 function NewProject() {
+	const history = useHistory()
+	const goToProject = (encodedUuid) => history.push(`/project/${encodedUuid}`)
 	const [createProjectName, setCreateProjectName] = React.useState('')
 	const [createProjectDueDate, setCreateProjectDueDate] = React.useState('')
 	
@@ -24,7 +27,7 @@ function NewProject() {
 			body: project
 		}).then((r)=>r.json()).then((j)=>{
 			if(j.encodedEditUuid){
-				window.location.href = `/project/${j.encodedEditUuid}`
+				goToProject(j.encodedEditUuid)
 			}
 		})
 	}
