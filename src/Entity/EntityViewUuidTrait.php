@@ -15,4 +15,8 @@ trait EntityViewUuidTrait{
 	public function getViewUuid(): UuidInterface{
 		return $this->viewUuid;
 	}
+
+	public function setViewUuid(UuidInterface $uuid){
+		$this->viewUuid = $uuid;
+	}
 }

@@ -27,6 +27,8 @@ class Project
     public function __construct()
     {
         $this->uuid = Uuid::uuid4();
+        $this->viewUuid = Uuid::uuid4();
+        $this->editUuid = Uuid::uuid4();
     }
 
     public function getName(): ?string

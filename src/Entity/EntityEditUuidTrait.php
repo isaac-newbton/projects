@@ -15,4 +15,8 @@ trait EntityEditUuidTrait{
 	public function getEditUuid(): UuidInterface{
 		return $this->editUuid;
 	}
+
+	public function setEditUuid(UuidInterface $uuid){
+		$this->editUuid = $uuid;
+	}
 }
