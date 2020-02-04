@@ -9,11 +9,14 @@ class App extends Component {
 		return (
 			<BrowserRouter>
 			<Switch>
+				<Route path="/project/:uuid">
+					<ProjectView />
+				</Route>
 				<Route exact path="/">
 					<NewProject/>
 				</Route>
-				<Route path="/project">
-					<ProjectView />
+				<Route>
+					TODO: create a 404 component here
 				</Route>
 			</Switch>
 			</BrowserRouter>
