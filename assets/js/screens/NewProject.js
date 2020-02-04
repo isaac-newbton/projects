@@ -13,9 +13,20 @@ function NewProject() {
 	const [createProjectName, setCreateProjectName] = React.useState('')
 	const [createProjectDueDate, setCreateProjectDueDate] = React.useState('')
 	
-	const createProject = (e, project) => {
+	const createProject = (e) => {
 		e.preventDefault()
-		console.log(createProjectName, createProjectDueDate)
+		let project = new FormData()
+		project.append('name', createProjectName)
+		project.append('dueDate', createProjectDueDate)
+		console.log(project)
+		const response = fetch('/api/v1/project/create', {
+			method: 'POST',
+			body: project
+		}).then((r)=>r.json()).then((j)=>{
+			if(j){
+				window.location.href = `/project/${j}`
+			}
+		})
 	}
 
 	return (
