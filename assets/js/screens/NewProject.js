@@ -23,8 +23,8 @@ function NewProject() {
 			method: 'POST',
 			body: project
 		}).then((r)=>r.json()).then((j)=>{
-			if(j){
-				window.location.href = `/project/${j}`
+			if(j.encodedEditUuid){
+				window.location.href = `/project/${j.encodedEditUuid}`
 			}
 		})
 	}

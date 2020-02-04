@@ -13,21 +13,32 @@ class ProjectApiController extends AbstractController {
 	 * @Route("/api/v1/project/create")
 	 */
 	public function createProject(Request $request, UuidEncoder $encoder){
-		$params = $request->request->all();
-		if(isset($params['name']) && !empty($params['name'])){
-			$entityManager = $this->getDoctrine()->getManager();
-			$project = new Project();
-			$project->setName($params['name']);
-			if(isset($params['dueDate']) && !empty($params['dueDate'])){
-				$project->setDueDate(new \DateTime($params['dueDate']));
-			}
-			$entityManager->persist($project);
-			$entityManager->flush();
-			return new JsonResponse($encoder->encode($project->getEditUuid()));
-		}else{
+		$name = $request->get("name");
+		$dueDate = $request->get("dueDate");
 
-		}
-		return new JsonResponse(false);
+		if (!$name) return new JsonResponse(["error" => "project name is required"], 418); // LOL
+
+		$em = $this->getDoctrine()->getManager();
+		
+		$project = new Project();
+		$project->setName($name);
+		if($dueDate) $project->setDueDate(new \DateTime($dueDate));
+
+
+		$em->persist($project);
+		$em->flush();
+		$em->refresh($project);
+
+		return new JsonResponse([
+			"name" => $project->getName(),
+			"uuid" => $project->getUuid(),
+			"viewUuid" => $project->getViewUuid(),
+			"editUuid" => $project->getEditUuid(),
+			"encodedUuid" => $encoder->encode($project->getUuid()),
+			"encodedViewUuid" => $encoder->encode($project->getViewUuid()),
+			"encodedEditUuid" => $encoder->encode($project->getEditUuid())
+		], 200);
+
 	}
 	/**
 	 * @Route("/api/v1/project/view")
