@@ -3,6 +3,8 @@ namespace App\Controller\Api;
 
 use App\Doctrine\UuidEncoder;
 use App\Entity\Project;
+use App\Repository\ProjectRepository;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,10 +43,23 @@ class ProjectApiController extends AbstractController {
 
 	}
 	/**
-	 * @Route("/api/v1/project/view")
+	 * @Route("/api/v1/project/view", methods={"POST"})
 	 */
-	public function viewProject(){
-		return new JsonResponse("TODO: return project");
+	public function viewProject(Request $request, ProjectRepository $projectRepository, UuidEncoder $encoder){
+		if (!$encodedUuid = $request->get('encodedUuid') ) return new JsonResponse("encodedUuid is required");
+
+		$decodedUuid = $encoder->decode($encodedUuid);
+		$project = $projectRepository->findOneBy(["viewUuid" => $decodedUuid]) ?? $projectRepository->findOneBy(["editUuid" => $decodedUuid]);
+
+		if ($project){
+			$permission = $project->getEditUuid() == $decodedUuid ? 'edit' : 'view';
+			return new JsonResponse([
+				"name" => $project->getName(),
+				"dueDate" => $project->getDueDate(),
+				$permission => true
+			]);
+		}
+		return new JsonResponse(["error" => "project matching encoded uuid not found"]);
 	}
 	/**
 	 * @Route("/api/v1/project/update")
