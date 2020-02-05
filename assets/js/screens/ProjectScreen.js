@@ -16,7 +16,12 @@ const ProjectScreen = props => {
 		dueDate: '2020-02-04',
 		viewUuid: 'ASasahyiuq34ASDGasg',
 		editUuid: 'ASasahyiuq34ASDGasg',
-		edit: true
+		edit: true,
+		tasks: [
+			{name: "some task"},
+			{name: "some other task"},
+			{name: "yet another task"},
+		]	
 	})
 
 	const fetchProject = () => {
