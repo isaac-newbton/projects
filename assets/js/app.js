@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import ProjectView from './screens/ProjectView';
+import ProjectScreen from './screens/ProjectScreen';
 import NewProject from './screens/NewProject';
 
 class App extends Component {
@@ -9,11 +9,11 @@ class App extends Component {
 		return (
 			<BrowserRouter>
 			<Switch>
-				<Route path="/project/:uuid">
-					<ProjectView />
-				</Route>
 				<Route exact path="/">
 					<NewProject/>
+				</Route>
+				<Route path="/project/:encodedUuid">
+					<ProjectScreen />
 				</Route>
 				<Route>
 					TODO: create a 404 component here
