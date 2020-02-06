@@ -13,6 +13,7 @@ class Project
     use EntityIdTrait;
     use EntityViewUuidTrait;
     use EntityEditUuidTrait;
+    use EntityDeletedTrait;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -29,6 +30,7 @@ class Project
         $this->uuid = Uuid::uuid4();
         $this->viewUuid = Uuid::uuid4();
         $this->editUuid = Uuid::uuid4();
+        $this->deleted = false;
     }
 
     public function getName(): ?string

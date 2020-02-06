@@ -9,7 +9,7 @@ trait RepositoryEditUuidFinderTrait{
 	 */
 	protected $uuidEncoder;
 
-	public function findOneByEncodedUuid(string $encoded){
+	public function findOneByEncodedEditUuid(string $encoded){
 		return $this->findOneBy([
 			'editUuid'=>$this->uuidEncoder->decode($encoded)
 		]);
