@@ -6,60 +6,43 @@ import EditProject from './projectView/EditProject';
 import ViewProject from './projectView/ViewProject';
 
 const ProjectScreen = props => {
-	const { encodedUuid } = useParams();
+	const { encodedUuid } = useParams('encodedUuid');
 	const [isLoading, setIsLoading] = useState(false) // FIXME: make true when backend api is complete
 
-	// TODO: complete this fetch!
-	const [project, setProject] = useState({ // FIXME: make null when backend api is complete
-		name: "the project name",
-		uuid: 'asdf-1234-qwer-0987-lkjh',
-		dueDate: '2020-02-04',
-		viewUuid: 'ASasahyiuq34ASDGasg',
-		editUuid: 'ASasahyiuq34ASDGasg',
-		edit: true,
-		tasks: [
-			{name: "some task"},
-			{name: "some other task"},
-			{name: "yet another task"},
-		]	
-	})
+	const [project, setProject] = useState(null);
 
 	const fetchProject = () => {
-		fetch("http://127.0.0.1", {
+		fetch("http://127.0.0.1:8000/api/v1/project/view", {
 			method: "POST",
-			body: {
+			body: JSON.stringify({
 				'encodedUuid' : encodedUuid
-			}
+			})
 		})
-		.then(resp => {
-			if (!resp.ok){
-				throw new Error("network response failure")
-			} else {
-				return resp.json()
-			}
-		})
+		.then(resp => resp.json())
 		.then(project => {
+			console.log('fetched the project!')
 			setProject(project)
+			setIsLoading(false)
 		})
 		.catch(error => {
-			setIsLoading(false)
 			return Promise.reject()
 		})
 	}
-	// useEffect(fetchProject, []) // TODO: complete this after the backend api is completed
+	useEffect(fetchProject, []) 
 
 	const updateProjectHandler = event => {
 		if (project[event.target.name] !== event.target.value){
 			project[event.target.name] = event.target.value;
 			setProject(project);
+			saveProject()
 		}
 	}
 
+	const saveProject = () => console.log("update the project with: " + project)
+
 	if (isLoading === true) return "loading..."
-	if (project){
-		if (project.edit){
-			return <EditProject updateProject={updateProjectHandler} project={project}/>
-		}
+	if (project) {
+		if (project.edit) return <EditProject updateProject={updateProjectHandler} project={project}/>
 		return <ViewProject project={project}/>
 	}
 	return "TODO: Handle this with a 404 component or something similar"
