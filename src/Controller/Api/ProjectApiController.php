@@ -57,6 +57,7 @@ class ProjectApiController extends AbstractController {
 			return new JsonResponse([
 				"name" => $project->getName(),
 				"dueDate" => $project->getDueDate(),
+				"encodedUuid" => $encoder->encode($project->getUuid()),
 				$permission => true
 			]);
 		}
