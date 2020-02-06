@@ -10,7 +10,7 @@ const ViewProject = props => {
 			<Row>
 				<Col>
 					<h1>Viewing: {props.project.name}</h1>
-					<Form.Control name="dueDate" onChange={event => props.updateProject(event)} type="date" defaultValue={props.project.dueDate.date.split(' ')[0]} />
+					<Form.Control name="dueDate" onChange={event => props.updateProject(event)} type="date" defaultValue={props.project.dueDate} />
 				</Col>
 			</Row>
 			{/* TODO: Return the tasks here */}

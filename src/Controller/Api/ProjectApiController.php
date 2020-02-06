@@ -4,6 +4,8 @@ namespace App\Controller\Api;
 use App\Doctrine\UuidEncoder;
 use App\Entity\Project;
 use App\Repository\ProjectRepository;
+use DateTimeZone;
+use DateTime;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -54,9 +56,10 @@ class ProjectApiController extends AbstractController {
 
 		if ($project){
 			$permission = $project->getEditUuid() == $decodedUuid ? 'edit' : 'view';
+
 			return new JsonResponse([
 				"name" => $project->getName(),
-				"dueDate" => $project->getDueDate(),
+				"dueDate" => $project->getDueDate()->format('Y-m-d'),
 				"encodedUuid" => $encoder->encode($project->getUuid()),
 				$permission => true
 			]);
@@ -64,10 +67,29 @@ class ProjectApiController extends AbstractController {
 		return new JsonResponse(["error" => "project matching encoded uuid not found"]);
 	}
 	/**
-	 * @Route("/api/v1/project/update")
+	 * @Route("/api/v1/project/update", methods={"POST"})
 	 */
-	public function updateProject(){
-		return new JsonResponse("TODO: update project");
+	public function updateProject(Request $request, ProjectRepository $projectRepository, UuidEncoder $encoder){
+		$data = json_decode($request->getContent());
+		if (!$data->project) return new JsonResponse("project is required");
+		$project = $projectRepository->findOneBy(["uuid" => $encoder->decode($data->project->encodedUuid)]);
+
+		if ($project){
+			$em = $this->getDoctrine()->getManager();
+			$project->setName($data->project->name);
+			$project->setDueDate(new DateTime($data->project->dueDate, new DateTimeZone('AMERICA/NEW_YORK')));
+			// TODO: update the tasks here
+			$em->persist($project);
+			$em->flush();
+			$em->refresh($project); // do we need this?
+			return new JsonResponse([
+				"name" => $project->getName(),
+				"dueDate" => $project->getDueDate()->format('Y-m-d'),
+				"encodedUuid" => $encoder->encode($project->getUuid()),
+				"edit" => true // this should always be edit if we have access to this endpoint
+			]); 
+		}
+		return new JsonResponse("Project to be updated not found");
 	}
 	/**
 	 * @Route("/api/v1/project/delete")
