@@ -10,14 +10,15 @@ const ViewProject = props => {
 			<Row>
 				<Col>
 					<h1>Viewing: {props.project.name}</h1>
-					<Form.Control name="dueDate" onChange={event => props.updateProject(event)} type="date" defaultValue={props.project.dueDate} />
+					<Form.Control name="dueDate" onChange={event => props.updateProject(event)} type="date" defaultValue={props.project.dueDate.date.split(' ')[0]} />
 				</Col>
 			</Row>
-			<Row>
+			{/* TODO: Return the tasks here */}
+			{/* <Row>
 				<Col>
 					{props.project.tasks.map(task => <div>{task.name}</div>)}
 				</Col>
-			</Row>
+			</Row> */}
 		</Container>
 	)
 }

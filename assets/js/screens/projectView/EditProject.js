@@ -16,14 +16,15 @@ const EditProject = props => {
 			<Row>
 				<Col>
 					<h1>Editing: {props.project.name}</h1>
-					<Form.Control name="dueDate" onChange={event => props.updateProject(event)} type="date" defaultValue={props.project.dueDate} />
+					<Form.Control name="dueDate" onChange={event => props.updateProject(event)} type="date" defaultValue={props.project.dueDate.date.split(' ')[0]} />
 				</Col>
 			</Row>
-			<Row>
+			{/* TODO: Return the tasks here */}
+			{/* <Row>
 				<Col>
 					{props.project.tasks.map((task, index) => <div key={index}>{task.name}</div>)}
 				</Col>
-			</Row>
+			</Row> */}
 			<Row>
 				<Col>
 					<Form onSubmit={addTask}>
