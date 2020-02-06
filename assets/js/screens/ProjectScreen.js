@@ -12,7 +12,7 @@ const ProjectScreen = props => {
 	const [project, setProject] = useState(null);
 
 	const fetchProject = () => {
-		fetch("http://127.0.0.1:8000/api/v1/project/view", {
+		fetch("/api/v1/project/view", {
 			method: "POST",
 			body: JSON.stringify({
 				'encodedUuid' : encodedUuid
@@ -38,7 +38,7 @@ const ProjectScreen = props => {
 	}
 
 	const saveProject = () => {
-		fetch("http://127.0.0.1:8000/api/v1/project/update", {
+		fetch("/api/v1/project/update", {
 			method: "POST",
 			body: JSON.stringify({
 				'project' : project

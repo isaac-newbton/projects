@@ -59,8 +59,9 @@ class ProjectApiController extends AbstractController {
 
 			return new JsonResponse([
 				"name" => $project->getName(),
-				"dueDate" => $project->getDueDate()->format('Y-m-d'),
+				"dueDate" => ($project->getDueDate() ? $project->getDueDate()->format('Y-m-d') : null),
 				"encodedUuid" => $encoder->encode($project->getUuid()),
+				"encodedEditUuid" => $encoder->encode($project->getEditUuid()),
 				$permission => true
 			]);
 		}
@@ -92,9 +93,20 @@ class ProjectApiController extends AbstractController {
 		return new JsonResponse("Project to be updated not found");
 	}
 	/**
-	 * @Route("/api/v1/project/delete")
+	 * @Route("/api/v1/project/delete/{encoded}", methods={"DELETE"})
 	 */
-	public function deleteProject(){
-		return new JsonResponse("TODO: delete project");
+	public function deleteProject(string $encoded, ProjectRepository $projectRepository){
+		/**
+		 * @var Project
+		 */
+		if(($project = $projectRepository->findOneByEncodedEditUuid($encoded)) && (!$project->getDeleted())){
+			$em = $this->getDoctrine()->getManager();
+			$project->setDeleted(true);
+			$em->persist($project);
+			$em->flush();
+			return new JsonResponse([true], 200);
+		}else{
+			return new JsonResponse(["error"=>"Project not found"], 404);
+		}
 	}
 }
