@@ -16,6 +16,8 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 class ProjectRepository extends ServiceEntityRepository
 {
     use RepositoryUuidFinderTrait;
+    use RepositoryViewUuidFinderTrait;
+    use RepositoryEditUuidFinderTrait;
 
     public function __construct(ManagerRegistry $registry)
     {

@@ -3,13 +3,26 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
+import { Button } from 'react-bootstrap';
+import { useHistory } from 'react-router-dom';
 
 const EditProject = props => {
+	const history = useHistory()
 	const [newTask, setNewTask] = useState('');
 	const addTask = event => {
 		event.preventDefault();
 		//TODO: create the new task using the api
 		console.log(newTask)
+	}
+	const goToHome = () => history.push('/')
+	const deleteProject = ()=>{
+		const response = fetch(`/api/v1/project/delete/${props.project.encodedEditUuid}`, {
+			method: 'DELETE'
+		}).then((r)=>{
+			if(200===r.status){
+				goToHome()
+			}
+		})
 	}
 	return (
 		<Container>
@@ -34,6 +47,11 @@ const EditProject = props => {
 							<Form.Control type="submit" />
 						</Form.Group>
 					</Form>
+				</Col>
+			</Row>
+			<Row>
+				<Col>
+					<Button variant="danger" type="button" onClick={deleteProject}>Delete</Button>
 				</Col>
 			</Row>
 		</Container>

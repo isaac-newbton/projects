@@ -9,7 +9,7 @@ trait RepositoryViewUuidFinderTrait{
 	 */
 	protected $uuidEncoder;
 
-	public function findOneByEncodedUuid(string $encoded){
+	public function findOneByEncodedViewUuid(string $encoded){
 		return $this->findOneBy([
 			'viewUuid'=>$this->uuidEncoder->decode($encoded)
 		]);
