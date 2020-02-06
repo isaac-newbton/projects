@@ -56,9 +56,10 @@ class ProjectApiController extends AbstractController {
 
 		if ($project){
 			$permission = $project->getEditUuid() == $decodedUuid ? 'edit' : 'view';
+
 			return new JsonResponse([
 				"name" => $project->getName(),
-				"dueDate" => $project->getDueDate(),
+				"dueDate" => $project->getDueDate()->format('Y-m-d'),
 				"encodedUuid" => $encoder->encode($project->getUuid()),
 				$permission => true
 			]);
@@ -70,18 +71,23 @@ class ProjectApiController extends AbstractController {
 	 */
 	public function updateProject(Request $request, ProjectRepository $projectRepository, UuidEncoder $encoder){
 		$data = json_decode($request->getContent());
-		if (!$encodedUuid = $data->encodedUuid) return new JsonResponse("encodedUuid is required");
-		$project = $projectRepository->findOneBy(["uuid" => $encoder->decode($encodedUuid)]);
+		if (!$data->project) return new JsonResponse("project is required");
+		$project = $projectRepository->findOneBy(["uuid" => $encoder->decode($data->project->encodedUuid)]);
 
 		if ($project){
 			$em = $this->getDoctrine()->getManager();
-			$project->setName($data->name);
-			$project->setDueDate(new DateTime($data->dueDate, new DateTimeZone('AMERICA/NEW_YORK')));
+			$project->setName($data->project->name);
+			$project->setDueDate(new DateTime($data->project->dueDate, new DateTimeZone('AMERICA/NEW_YORK')));
 			// TODO: update the tasks here
 			$em->persist($project);
 			$em->flush();
 			$em->refresh($project); // do we need this?
-			return new JsonResponse($project->getName() . " updated");
+			return new JsonResponse([
+				"name" => $project->getName(),
+				"dueDate" => $project->getDueDate()->format('Y-m-d'),
+				"encodedUuid" => $encoder->encode($project->getUuid()),
+				"edit" => true // this should always be edit if we have access to this endpoint
+			]); 
 		}
 		return new JsonResponse("Project to be updated not found");
 	}
