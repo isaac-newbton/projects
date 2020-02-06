@@ -46,7 +46,8 @@ class ProjectApiController extends AbstractController {
 	 * @Route("/api/v1/project/view", methods={"POST"})
 	 */
 	public function viewProject(Request $request, ProjectRepository $projectRepository, UuidEncoder $encoder){
-		if (!$encodedUuid = $request->get('encodedUuid') ) return new JsonResponse("encodedUuid is required");
+		$data = json_decode($request->getContent());
+		if (!$encodedUuid = $data->encodedUuid) return new JsonResponse("encodedUuid is required");
 
 		$decodedUuid = $encoder->decode($encodedUuid);
 		$project = $projectRepository->findOneBy(["viewUuid" => $decodedUuid]) ?? $projectRepository->findOneBy(["editUuid" => $decodedUuid]);
