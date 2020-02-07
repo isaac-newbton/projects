@@ -9,7 +9,9 @@
 			{% for project in projects %}
 				<li class="list-group-item">
 					<div>
-						<a href="/project/{{ project.editUuid }}"><h5>{{ project.name }}</h5></a>
+						<h5>{{ project.name }}</h5>
+						<a href="/project/{{ project.encodedEditUuid }}">Edit</a>
+						<a href="/project/{{ project.encodedViewUuid }}">View</a>
 					</div>
 				</li>
 			{% endfor %}

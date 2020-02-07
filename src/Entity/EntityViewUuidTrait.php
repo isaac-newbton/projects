@@ -1,6 +1,7 @@
 <?php
 namespace App\Entity;
 
+use App\Doctrine\UuidEncoder;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 
@@ -18,5 +19,10 @@ trait EntityViewUuidTrait{
 
 	public function setViewUuid(UuidInterface $uuid){
 		$this->viewUuid = $uuid;
+	}
+
+	public function getEncodedViewUuid(){
+		$encoder = new UuidEncoder();
+		return $encoder->encode($this->viewUuid);
 	}
 }
