@@ -55,7 +55,7 @@ const ProjectScreen = props => {
 	}
 
 	if (isLoading === true) return "loading..."
-	if (project) {
+	if (project && 'name' in project) {
 		if (project.edit) return <EditProject updateProject={updateProjectHandler} project={project}/>
 		return <ViewProject project={project}/>
 	}

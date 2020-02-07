@@ -51,11 +51,11 @@ class ProjectApiController extends AbstractController {
 		$data = json_decode($request->getContent());
 		if (!$encodedUuid = $data->encodedUuid) return new JsonResponse("encodedUuid is required");
 
-		$decodedUuid = $encoder->decode($encodedUuid);
-		$project = $projectRepository->findOneBy(["viewUuid" => $decodedUuid]) ?? $projectRepository->findOneBy(["editUuid" => $decodedUuid]);
+		// $decodedUuid = $encoder->decode($encodedUuid);
+		$project = $projectRepository->findOneByEncodedEditUuid($encodedUuid) ?? $projectRepository->findOneByEncodedViewUuid($encodedUuid);
 
 		if ($project){
-			$permission = $project->getEditUuid() == $decodedUuid ? 'edit' : 'view';
+			$permission = $project->getEditUuid() == $encoder->decode($encodedUuid) ? 'edit' : 'view';
 
 			return new JsonResponse([
 				"name" => $project->getName(),
