@@ -1,0 +1,21 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+<div class="container">
+	<div class="row">
+		<div class="col">
+			<ul class="list-group">
+			{% for project in projects %}
+				<li class="list-group-item">
+					<div>
+						<a href="/project/{{ project.editUuid }}"><h5>{{ project.name }}</h5></a>
+					</div>
+				</li>
+			{% endfor %}
+			</ul>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
