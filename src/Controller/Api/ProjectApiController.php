@@ -73,7 +73,7 @@ class ProjectApiController extends AbstractController {
 	public function updateProject(Request $request, ProjectRepository $projectRepository, UuidEncoder $encoder){
 		$data = json_decode($request->getContent());
 		if (!$data->project) return new JsonResponse("project is required");
-		$project = $projectRepository->findOneBy(["uuid" => $encoder->decode($data->project->encodedUuid)]);
+		$project = $projectRepository->findOneByEncodedEditUuid($data->project->encodedEditUuid);
 
 		if ($project){
 			$em = $this->getDoctrine()->getManager();
@@ -86,6 +86,7 @@ class ProjectApiController extends AbstractController {
 			return new JsonResponse([
 				"name" => $project->getName(),
 				"dueDate" => $project->getDueDate()->format('Y-m-d'),
+				"encodedEditUuid" => $encoder->encode($project->getEditUuid()),
 				"encodedUuid" => $encoder->encode($project->getUuid()),
 				"edit" => true // this should always be edit if we have access to this endpoint
 			]); 
