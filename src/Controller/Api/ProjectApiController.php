@@ -110,6 +110,12 @@ class ProjectApiController extends AbstractController {
 		if(($project = $projectRepository->findOneByEncodedEditUuid($encoded)) && (!$project->getDeleted())){
 			$em = $this->getDoctrine()->getManager();
 			$project->setDeleted(true);
+			if($tasks = $project->getTasks()){
+				foreach($tasks as $task){
+					$task->setDeleted(true);
+					$em->persist($task);
+				}
+			}
 			$em->persist($project);
 			$em->flush();
 			return new JsonResponse([true], 200);
