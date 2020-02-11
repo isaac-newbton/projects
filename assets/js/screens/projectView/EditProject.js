@@ -3,8 +3,10 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import ListGroup from 'react-bootstrap/ListGroup';
 import { useHistory } from 'react-router-dom';
+import Task from '../../components/Task';
 
 const EditProject = props => {
 	const history = useHistory()
@@ -34,11 +36,13 @@ const EditProject = props => {
 				</Col>
 			</Row>
 			{/* TODO: Return the tasks here */}
-			{/* <Row>
+			<Row>
 				<Col>
-					{props.project.tasks.map((task, index) => <div key={index}>{task.name}</div>)}
+					<ListGroup>
+						{props.project.tasks.map(task => <Task key={task.uuid} name={task.name} dueDate={task.dueDate} />)}
+					</ListGroup>
 				</Col>
-			</Row> */}
+			</Row>
 			<Row>
 				<Col>
 					<Form onSubmit={addTask}>

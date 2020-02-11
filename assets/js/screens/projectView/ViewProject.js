@@ -3,6 +3,8 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
+import Task from '../../components/Task';
+import ListGroup from 'react-bootstrap/ListGroup';
 
 const ViewProject = props => {
 	return (
@@ -14,11 +16,13 @@ const ViewProject = props => {
 				</Col>
 			</Row>
 			{/* TODO: Return the tasks here */}
-			{/* <Row>
+			<Row>
 				<Col>
-					{props.project.tasks.map(task => <div>{task.name}</div>)}
+					<ListGroup>
+						{props.project.tasks.map(task => <Task key={task.uuid} name={task.name} dueDate={dueDate} />)}
+					</ListGroup>
 				</Col>
-			</Row> */}
+			</Row>
 		</Container>
 	)
 }
