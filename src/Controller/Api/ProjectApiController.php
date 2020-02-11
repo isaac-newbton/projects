@@ -62,7 +62,14 @@ class ProjectApiController extends AbstractController {
 				"dueDate" => ($project->getDueDate() ? $project->getDueDate()->format('Y-m-d') : null),
 				"encodedUuid" => $encoder->encode($project->getUuid()),
 				"encodedEditUuid" => $encoder->encode($project->getEditUuid()),
-				$permission => true
+				$permission => true,
+				"tasks" => array_map(function($task){
+					return [
+						"name" => $task->getName(),
+						"dueDate" => $task->getDueDate() ? $task->getDueDate()->format('y-m-d') : null,
+						"uuid" => $task->getUuid(),
+					];
+				}, $project->getTasks()->getValues())
 			]);
 		}
 		return new JsonResponse(["error" => "project matching encoded uuid not found"]);
