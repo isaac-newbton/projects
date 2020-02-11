@@ -10,12 +10,10 @@ use Ramsey\Uuid\Uuid;
  */
 class Task
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    use EntityIdTrait;
+    use EntityViewUuidTrait;
+    use EntityEditUuidTrait;
+    use EntityDeletedTrait;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -38,11 +36,7 @@ class Task
         $this->uuid = Uuid::uuid4();
         $this->viewUuid = Uuid::uuid4();
         $this->editUuid = Uuid::uuid4();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
+        $this->deleted = false;
     }
 
     public function getName(): ?string
