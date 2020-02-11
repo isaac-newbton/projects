@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ProjectApiController extends AbstractController {
+class TaskApiController extends AbstractController {
 	/**
 	 * @Route("/api/v1/task/create")
 	 */
@@ -20,7 +20,7 @@ class ProjectApiController extends AbstractController {
 	public function viewTask(){
 		return new JsonResponse('TODO: view task');
 	}
-	
+
 	/**
 	 * @Route("/api/v1/task/update", methods={"POST"})
 	 */
