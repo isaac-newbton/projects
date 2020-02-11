@@ -15,7 +15,6 @@ const ViewProject = props => {
 					<Form.Control name="dueDate" onChange={event => props.updateProject(event)} type="date" defaultValue={props.project.dueDate} />
 				</Col>
 			</Row>
-			{/* TODO: Return the tasks here */}
 			<Row>
 				<Col>
 					<ListGroup>
