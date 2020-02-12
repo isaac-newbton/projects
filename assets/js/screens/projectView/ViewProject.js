@@ -18,7 +18,15 @@ const ViewProject = props => {
 			<Row>
 				<Col>
 					<ListGroup>
-						{props.project.tasks.map(task => <Task key={task.uuid} name={task.name} dueDate={task.dueDate} />)}
+					{props.project.tasks.map(task => {
+						if (task.active){ // TODO: refactor me ...someday
+							return (
+								<div key={task.encodedUuid}>
+									<Task name={task.name} dueDate={task.dueDate}/>
+								</div>
+							)
+						}
+					})}
 					</ListGroup>
 				</Col>
 			</Row>
