@@ -9,7 +9,7 @@
 			{% for project in projects %}
 				<li class="list-group-item">
 					<div>
-						<h5>{{ project.name }}</h5>
+						<h5>{{ project.name }} - {{project.deleted ? 'deleted' : 'active'}}</h5>
 						<a href="/project/{{ project.encodedEditUuid }}">Edit</a>
 						<a href="/project/{{ project.encodedViewUuid }}">View</a>
 					</div>

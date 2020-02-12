@@ -7,7 +7,7 @@ import ViewProject from './projectView/ViewProject';
 
 const ProjectScreen = props => {
 	const { encodedUuid } = useParams('encodedUuid');
-	const [isLoading, setIsLoading] = useState(false) // FIXME: make true when backend api is complete
+	const [isLoading, setIsLoading] = useState(true)
 
 	const [project, setProject] = useState(null);
 
@@ -56,7 +56,7 @@ const ProjectScreen = props => {
 
 	if (isLoading === true) return "loading..."
 	if (project && 'name' in project) {
-		if (project.edit) return <EditProject updateProject={updateProjectHandler} project={project}/>
+		if (project.edit) return <EditProject updateProject={updateProjectHandler} refreshProject={fetchProject} project={project}/>
 		return <ViewProject project={project}/>
 	}
 	return "TODO: Handle this with a 404 component or something similar"

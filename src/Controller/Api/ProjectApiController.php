@@ -93,9 +93,16 @@ class ProjectApiController extends AbstractController {
 			return new JsonResponse([
 				"name" => $project->getName(),
 				"dueDate" => $project->getDueDate()->format('Y-m-d'),
-				"encodedEditUuid" => $encoder->encode($project->getEditUuid()),
 				"encodedUuid" => $encoder->encode($project->getUuid()),
-				"edit" => true // this should always be edit if we have access to this endpoint
+				"encodedEditUuid" => $encoder->encode($project->getEditUuid()),
+				"edit" => true, // this should always be edit if we have access to this endpoint
+				"tasks" => array_map(function($task){
+					return [
+						"name" => $task->getName(),
+						"dueDate" => $task->getDueDate() ? $task->getDueDate()->format('y-m-d') : null,
+						"uuid" => $task->getUuid(),
+					];
+				}, $project->getTasks()->getValues())
 			]); 
 		}
 		return new JsonResponse("Project to be updated not found");

@@ -15,11 +15,10 @@ const ViewProject = props => {
 					<Form.Control name="dueDate" onChange={event => props.updateProject(event)} type="date" defaultValue={props.project.dueDate} />
 				</Col>
 			</Row>
-			{/* TODO: Return the tasks here */}
 			<Row>
 				<Col>
 					<ListGroup>
-						{props.project.tasks.map(task => <Task key={task.uuid} name={task.name} dueDate={dueDate} />)}
+						{props.project.tasks.map(task => <Task key={task.uuid} name={task.name} dueDate={task.dueDate} />)}
 					</ListGroup>
 				</Col>
 			</Row>
