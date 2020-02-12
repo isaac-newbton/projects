@@ -63,11 +63,13 @@ class ProjectApiController extends AbstractController {
 				"encodedUuid" => $encoder->encode($project->getUuid()),
 				"encodedEditUuid" => $encoder->encode($project->getEditUuid()),
 				$permission => true,
-				"tasks" => array_map(function($task){
+				"tasks" => array_map(function($task) use ($encoder){
 					return [
 						"name" => $task->getName(),
 						"dueDate" => $task->getDueDate() ? $task->getDueDate()->format('y-m-d') : null,
-						"uuid" => $task->getUuid(),
+						"encodedUuid" => $encoder->encode($task->getUuid()),
+						"encodedViewUuid" => $encoder->encode($task->getViewUuid()),
+						"encodedEditUuid" => $encoder->encode($task->getEditUuid()),
 					];
 				}, $project->getTasks()->getValues())
 			]);
@@ -96,11 +98,13 @@ class ProjectApiController extends AbstractController {
 				"encodedUuid" => $encoder->encode($project->getUuid()),
 				"encodedEditUuid" => $encoder->encode($project->getEditUuid()),
 				"edit" => true, // this should always be edit if we have access to this endpoint
-				"tasks" => array_map(function($task){
+				"tasks" => array_map(function($task) use ($encoder){
 					return [
 						"name" => $task->getName(),
 						"dueDate" => $task->getDueDate() ? $task->getDueDate()->format('y-m-d') : null,
-						"uuid" => $task->getUuid(),
+						"encodedUuid" => $encoder->encode($task->getUuid()),
+						"encodedViewUuid" => $encoder->encode($task->getViewUuid()),
+						"encodedEditUuid" => $encoder->encode($task->getEditUuid()),
 					];
 				}, $project->getTasks()->getValues())
 			]); 
