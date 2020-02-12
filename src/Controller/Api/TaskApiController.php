@@ -1,14 +1,8 @@
 <?php
 namespace App\Controller\Api;
 
-<<<<<<< HEAD
 use App\Doctrine\UuidEncoder;
 use App\Repository\TaskRepository;
-=======
-use App\Entity\Project;
-use App\Entity\Task;
-use App\Repository\ProjectRepository;
->>>>>>> master
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,36 +15,6 @@ class TaskApiController extends AbstractController {
 	/**
 	 * @Route("/api/v1/task/create", methods={"POST"})
 	 */
-<<<<<<< HEAD
-	public function createTask(Request $request, UuidEncoder $encoder, ProjectRepository $projectRepository){
-		$name = $request->get('name');
-		$dueDate = $request->get('dueDate');
-		$projectEncodedUuid = $request->get('project');
-		if(!$name) return new JsonResponse(['error'=>'name is required'], 418);
-		if(!$projectEncodedUuid) return new JsonResponse(['error'=>'project is required'], 418);
-		/**
-		 * @var Project|null
-		 */
-		$project = $projectRepository->findOneByEncodedEditUuid($projectEncodedUuid);
-		if(!$project) return new JsonResponse(['error'=>'project not found'], 418);
-		$em = $this->getDoctrine()->getManager();
-		$task = new Task();
-		$task->setName($name);
-		$task->setDueDate($dueDate ?? $project->getDueDate());
-		$project->addTask($task);
-		$em->persist($task);
-		$em->persist($project);
-		$em->flush();
-		return new JsonResponse([
-			"name" => $task->getName(),
-			"uuid" => $task->getUuid(),
-			"viewUuid" => $task->getViewUuid(),
-			"editUuid" => $task->getEditUuid(),
-			"encodedUuid" => $encoder->encode($task->getUuid()),
-			"encodedViewUuid" => $encoder->encode($task->getViewUuid()),
-			"encodedEditUuid" => $encoder->encode($task->getEditUuid())
-		], 200);
-=======
 	public function createTask(Request $request, ProjectRepository $projectRepository){
 		$data = json_decode($request->getContent());
 		if (!$data->name) return new JsonResponse(['error' => 'Task name is required']);
@@ -80,7 +44,6 @@ class TaskApiController extends AbstractController {
 		// 	}, $project->getTasks()->getValues())
 		// 	]
 		// );
->>>>>>> master
 	}
 
 	/**
