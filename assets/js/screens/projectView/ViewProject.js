@@ -18,7 +18,7 @@ const ViewProject = props => {
 			<Row>
 				<Col>
 					<ListGroup>
-						{props.project.tasks.map(task => <Task key={task.uuid} name={task.name} dueDate={dueDate} />)}
+						{props.project.tasks.map(task => <Task key={task.uuid} name={task.name} dueDate={task.dueDate} />)}
 					</ListGroup>
 				</Col>
 			</Row>
