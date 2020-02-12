@@ -59,7 +59,7 @@ const EditProject = props => {
 				<Col>
 					<ListGroup>
 						{props.project.tasks.map(task => (
-						<div key={task.Encodeduuid}>
+						<div key={task.encodedEditUuid}>
 							<Task name={task.name} dueDate={task.dueDate} />
 							<Button variant="danger" onClick={() => deleteTask(task.encodedEditUuid)} className="">delete</Button>
 						</div>
