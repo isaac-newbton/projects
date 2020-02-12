@@ -48,7 +48,7 @@ const TaskScreen = props => {
 
 	if(isLoading===true) return 'loading...'
 	if(task && 'name' in task){
-		if(project.edit) return <EditTask updateTask={updateTaskHandler} task={task}/>
+		if(task.edit) return <EditTask updateTask={updateTaskHandler} task={task}/>
 		return <ViewTask task={task}/>
 	}
 	return 'TODO: 404 for task'

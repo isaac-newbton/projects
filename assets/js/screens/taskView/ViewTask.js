@@ -9,6 +9,11 @@ const ViewTask = props => {
 			<Row>
 				<Col>
 					<h1>Viewing Task: {props.task.name}</h1>
+					<h2>
+						<a href={'/project/' + props.task.project.encodedViewUuid}>
+							{props.task.project.name}
+						</a>
+					</h2>
 				</Col>
 			</Row>
 		</Container>

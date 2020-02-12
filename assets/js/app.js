@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import ProjectScreen from './screens/ProjectScreen';
 import NewProject from './screens/NewProject';
+import TaskScreen from './screens/TaskScreen';
 
 class App extends Component {
 	render() {
@@ -14,6 +15,9 @@ class App extends Component {
 				</Route>
 				<Route path="/project/:encodedUuid">
 					<ProjectScreen />
+				</Route>
+				<Route path="/task/:encodedUuid">
+					<TaskScreen/>
 				</Route>
 				<Route>
 					TODO: create a 404 component here

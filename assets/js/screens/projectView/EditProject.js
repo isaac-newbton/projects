@@ -62,7 +62,7 @@ const EditProject = props => {
 							if (task.active){ // TODO: refactor me ...someday
 								return (
 									<div key={task.encodedUuid}>
-										<Task name={task.name} dueDate={task.dueDate}/>
+										<Task name={task.name} dueDate={task.dueDate} encodedEditUuid={task.encodedEditUuid}/>
 										<Button variant="danger" onClick={() => deleteTask(task.encodedEditUuid)} className="">delete</Button>
 									</div>
 								)

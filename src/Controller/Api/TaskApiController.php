@@ -65,11 +65,13 @@ class TaskApiController extends AbstractController {
 				'encodedUuid'=>$encoder->encode($task->getUuid()),
 				'encodedEditUuid'=>('edit'===$permission) ? $encoder->encode($task->getEditUuid()) : null,
 				'encodedViewUuid'=>$encoder->encode($task->getViewUuid()),
+				$permission => true,
 				'project'=>($project) ? [
 					'name'=>$project->getName(),
 					'dueDate'=>$project->getDueDate(),
 					'encodedUuid'=>$encoder->encode($project->getUuid()),
-					'encodedViewUuid'=>$encoder->encode($project->getViewUuid())
+					'encodedViewUuid'=>$encoder->encode($project->getViewUuid()),
+					'encodedEditUuid'=>('edit'===$permission) ? $encoder->encode($project->getEditUuid()) : null
 				] : null
 			]);
 		}
