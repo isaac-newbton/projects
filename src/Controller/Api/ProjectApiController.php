@@ -70,6 +70,7 @@ class ProjectApiController extends AbstractController {
 						"encodedUuid" => $encoder->encode($task->getUuid()),
 						"encodedViewUuid" => $encoder->encode($task->getViewUuid()),
 						"encodedEditUuid" => $encoder->encode($task->getEditUuid()),
+						"active" => !$task->getDeleted() ? true : false,
 					];
 				}, $project->getTasks()->getValues())
 			]);
@@ -105,6 +106,7 @@ class ProjectApiController extends AbstractController {
 						"encodedUuid" => $encoder->encode($task->getUuid()),
 						"encodedViewUuid" => $encoder->encode($task->getViewUuid()),
 						"encodedEditUuid" => $encoder->encode($task->getEditUuid()),
+						"active" => !$task->getDeleted() ? true : false,
 					];
 				}, $project->getTasks()->getValues())
 			]); 

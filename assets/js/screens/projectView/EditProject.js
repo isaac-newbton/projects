@@ -33,7 +33,7 @@ const EditProject = props => {
 		fetch('/api/v1/task/delete/'+encodedEditUuid, {
 			method: 'DELETE'
 		}).then(resp=>resp.json())
-		.then(props.refreshProject())
+		.then(() => props.refreshProject())
 	}
 
 	const goToHome = () => history.push('/')
@@ -58,12 +58,16 @@ const EditProject = props => {
 			<Row>
 				<Col>
 					<ListGroup>
-						{props.project.tasks.map(task => (
-						<div key={task.encodedEditUuid}>
-							<Task name={task.name} dueDate={task.dueDate} />
-							<Button variant="danger" onClick={() => deleteTask(task.encodedEditUuid)} className="">delete</Button>
-						</div>
-						))}
+						{props.project.tasks.map(task => {
+							if (task.active){ // TODO: refactor me ...someday
+								return (
+									<div key={task.encodedUuid}>
+										<Task name={task.name} dueDate={task.dueDate}/>
+										<Button variant="danger" onClick={() => deleteTask(task.encodedEditUuid)} className="">delete</Button>
+									</div>
+								)
+							}
+						})}
 					</ListGroup>
 				</Col>
 			</Row>
