@@ -23,6 +23,7 @@ class UserFixtures extends Fixture
             $user_email,
             'FunnelKake$!'
         ));
+        $user_email->setRoles(['ROLE_DEVELOPER']);
 
         $user_mobile = new User();
         $user_mobile->setMobileNumber('888-200-3110');
@@ -30,6 +31,7 @@ class UserFixtures extends Fixture
             $user_mobile,
             'FunnelKake$!'
         ));
+        $user_mobile->setRoles(['ROLE_DEVELOPER']);
 
         $manager->persist($user_email);
         $manager->persist($user_mobile);
