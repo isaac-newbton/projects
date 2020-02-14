@@ -1,13 +1,15 @@
 <?php
 namespace App\Controller\Api;
 
-use App\Entity\Project;
-use App\Entity\Task;
-use App\Repository\ProjectRepository;
+use App\Doctrine\UuidEncoder;
+use App\Repository\TaskRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\Task;
+use App\Entity\Project;
+use App\Repository\ProjectRepository;
 
 class TaskApiController extends AbstractController {
 	/**
@@ -47,8 +49,33 @@ class TaskApiController extends AbstractController {
 	/**
 	 * @Route("/api/v1/task/view")
 	 */
-	public function viewTask(){
-		return new JsonResponse('TODO: view task');
+	public function viewTask(Request $request, TaskRepository $taskRepository, UuidEncoder $encoder){
+		$data = json_decode($request->getContent());
+		if(!$encodedUuid = $data->encodedUuid) return new JsonResponse(['error'=>'encodedUuid required'], 400);
+
+		/**
+		 * @var Task|null
+		 */
+		$task = $taskRepository->findOneByEncodedEditUuid($encodedUuid) ?? $taskRepository->findOneByEncodedViewUuid($encodedUuid);
+		if($task){
+			$project = $task->getProject();
+			$permission = $task->getEditUuid() == $encoder->decode($encodedUuid) ? 'edit' : 'view';
+			return new JsonResponse([
+				'name'=>$task->getName(),
+				'encodedUuid'=>$encoder->encode($task->getUuid()),
+				'encodedEditUuid'=>('edit'===$permission) ? $encoder->encode($task->getEditUuid()) : null,
+				'encodedViewUuid'=>$encoder->encode($task->getViewUuid()),
+				$permission => true,
+				'project'=>($project) ? [
+					'name'=>$project->getName(),
+					'dueDate'=>$project->getDueDate(),
+					'encodedUuid'=>$encoder->encode($project->getUuid()),
+					'encodedViewUuid'=>$encoder->encode($project->getViewUuid()),
+					'encodedEditUuid'=>('edit'===$permission) ? $encoder->encode($project->getEditUuid()) : null
+				] : null
+			]);
+		}
+		return new JsonResponse(['error'=>'task not found for that uuid']);
 	}
 
 	/**
@@ -61,7 +88,18 @@ class TaskApiController extends AbstractController {
 	/**
 	 * @Route("/api/v1/task/delete/{encoded}", methods={"DELETE"})
 	 */
-	public function deleteTask(){
-			return new JsonResponse('TODO: delete task');
+	public function deleteTask(string $encoded, TaskRepository $taskRepository){
+		/**
+		 * @var Task
+		 */
+		if(($task = $taskRepository->findOneByEncodedEditUuid($encoded)) && (!$task->getDeleted())){
+			$em = $this->getDoctrine()->getManager();
+			$task->setDeleted(true);
+			$em->persist($task);
+			$em->flush();
+			return new JsonResponse([true], 200);
+		}else{
+			return new JsonResponse(["error"=>"Task not found"], 404);
+		}
 	}
 }
