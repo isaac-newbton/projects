@@ -29,8 +29,8 @@ const EditProject = props => {
 		})
 	}
 
-	const deleteTask = encodedEditUuid => {
-		fetch('/api/v1/task/delete/'+encodedEditUuid, {
+	const deleteTask = encodedUuid => {
+		fetch('/api/v1/task/delete/'+encodedUuid, {
 			method: 'DELETE'
 		}).then(resp=>resp.json())
 		.then(() => props.refreshProject())
@@ -38,7 +38,7 @@ const EditProject = props => {
 
 	const goToHome = () => history.push('/')
 	const deleteProject = ()=>{
-		const response = fetch(`/api/v1/project/delete/${props.project.encodedEditUuid}`, {
+		const response = fetch(`/api/v1/project/delete/${props.project.encodedUuid}`, {
 			method: 'DELETE'
 		}).then((r)=>{
 			if(200===r.status){
@@ -62,8 +62,8 @@ const EditProject = props => {
 							if (task.active){ // TODO: refactor me ...someday
 								return (
 									<div key={task.encodedUuid}>
-										<Task name={task.name} dueDate={task.dueDate} encodedEditUuid={task.encodedEditUuid}/>
-										<Button variant="danger" onClick={() => deleteTask(task.encodedEditUuid)} className="">delete</Button>
+										<Task name={task.name} dueDate={task.dueDate} encodedUuid={task.encodedUuid}/>
+										<Button variant="danger" onClick={() => deleteTask(task.encodedUuid)} className="">delete</Button>
 									</div>
 								)
 							}

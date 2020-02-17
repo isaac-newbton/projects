@@ -10,7 +10,7 @@ const EditTask = props => {
 				<Col>
 					<h1>Editing Task: {props.task.name}</h1>
 					<h2>
-						<a href={'/project/' + props.task.project.encodedEditUuid ?? props.task.project.encodedViewUuid}>
+						<a href={'/project/' + props.task.project.encodedUuid}>
 							{props.task.project.name}
 						</a>
 					</h2>

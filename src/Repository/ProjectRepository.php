@@ -25,6 +25,20 @@ class ProjectRepository extends ServiceEntityRepository
         $this->uuidEncoder = new UuidEncoder();
     }
 
+    public function findExpiredAndUnowned(){
+        $em = $this->getEntityManager();
+
+        $query = $em->createQuery(
+            'SELECT p
+            FROM App\Entity\Project p
+            WHERE p.owner IS NULL
+            AND p.expireDt <= :dt
+            ORDER BY p.expireDt ASC'
+        )->setParameter('dt', new \DateTime());
+
+        return $query->getResult();
+    }
+
     // /**
     //  * @return Project[] Returns an array of Project objects
     //  */

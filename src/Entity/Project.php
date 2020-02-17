@@ -15,6 +15,8 @@ class Project
     use EntityIdTrait;
     use EntityDeletedTrait;
 
+    const DEFAULT_EXPIRATION_STRING = '+3 days';
+
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -30,11 +32,22 @@ class Project
      */
     private $tasks;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
+     */
+    private $owner;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $expireDt;
+
     public function __construct()
     {
         $this->uuid = Uuid::uuid4();
         $this->deleted = false;
         $this->tasks = new ArrayCollection();
+        $this->expireDt = new \DateTime(self::DEFAULT_EXPIRATION_STRING);
     }
 
     public function getName(): ?string
@@ -88,6 +101,30 @@ class Project
                 $task->setProject(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): self
+    {
+        $this->owner = $owner;
+
+        return $this;
+    }
+
+    public function getExpireDt(): ?\DateTimeInterface
+    {
+        return $this->expireDt;
+    }
+
+    public function setExpireDt(?\DateTimeInterface $expireDt): self
+    {
+        $this->expireDt = $expireDt;
 
         return $this;
     }

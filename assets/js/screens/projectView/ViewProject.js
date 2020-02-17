@@ -22,7 +22,7 @@ const ViewProject = props => {
 						if (task.active){ // TODO: refactor me ...someday
 							return (
 								<div key={task.encodedUuid}>
-									<Task name={task.name} dueDate={task.dueDate} encodedViewUuid={task.encodedViewUuid}/>
+									<Task name={task.name} dueDate={task.dueDate} encodedUuid={task.encodedUuid}/>
 								</div>
 							)
 						}
