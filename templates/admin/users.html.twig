@@ -1,0 +1,27 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+<div class="container">
+	<div class="row">
+		<div class="col">
+			<h1>Users</h1>
+			<ul class="list-group">
+			{% for user in users %}
+				<li class="list-group-item">
+					<div>
+						<h3>{{ user.email ?? user.mobileNumber }}</h3>
+						<h5>{{ user.uuid }}</h5>
+						Roles: {{ user.roles|join(', ') }}
+					</div>
+				</li>
+			{% endfor %}
+			</ul>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}
