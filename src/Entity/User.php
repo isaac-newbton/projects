@@ -41,9 +41,21 @@ class User implements UserInterface
      */
     private $projects;
 
+    /**
+     * @ORM\Column(type="boolean", options={"default": false})
+     */
+    private $emailVerified;
+
+    /**
+     * @ORM\Column(type="boolean", options={"default": false})
+     */
+    private $mobileNumberVerified;
+
     public function __construct(){
         $this->uuid = Uuid::uuid4();
         $this->projects = new ArrayCollection();
+        $this->emailVerified = false;
+        $this->mobileNumberVerified = false;
     }
 
     public function getId(): ?int
@@ -165,5 +177,33 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+    public function getEmailVerified(): ?bool
+    {
+        return $this->emailVerified;
+    }
+
+    public function setEmailVerified(bool $emailVerified): self
+    {
+        $this->emailVerified = $emailVerified;
+
+        return $this;
+    }
+
+    public function getMobileNumberVerified(): ?bool
+    {
+        return $this->mobileNumberVerified;
+    }
+
+    public function setMobileNumberVerified(bool $mobileNumberVerified): self
+    {
+        $this->mobileNumberVerified = $mobileNumberVerified;
+
+        return $this;
+    }
+
+    public function isVerified(): bool{
+        return ($this->getEmailVerified() || $this->getMobileNumberVerified());
     }
 }
