@@ -31,19 +31,7 @@ class TaskApiController extends AbstractController {
 		$em->persist($task);
 		$em->flush($task);
 
-
-		// adding a task should return all of the tasks in the event that someone else might have added some!
 		return new JsonResponse(['success', 200]);
-		// return new JsonResponse(
-		// 	["tasks" => array_map(function($task){
-		// 		return [
-		// 			"name" => $task->getName(),
-		// 			"dueDate" => $task->getDueDate() ? $task->getDueDate()->format('y-m-d') : null,
-		// 			"uuid" => $task->getUuid(),
-		// 		];
-		// 	}, $project->getTasks()->getValues())
-		// 	]
-		// );
 	}
 
 	/**
@@ -56,7 +44,7 @@ class TaskApiController extends AbstractController {
 		/**
 		 * @var Task|null
 		 */
-		$task = $taskRepository->findOneByEncodedEditUuid($encodedUuid) ?? $taskRepository->findOneByEncodedViewUuid($encodedUuid);
+		$task = $taskRepository->findOneByEncodedUuid($encodedUuid);
 		if($task){
 			$project = $task->getProject();
 			return new JsonResponse([
@@ -86,7 +74,7 @@ class TaskApiController extends AbstractController {
 		/**
 		 * @var Task
 		 */
-		if(($task = $taskRepository->findOneByEncodedEditUuid($encoded)) && (!$task->getDeleted())){
+		if(($task = $taskRepository->findOneByEncodedUuid($encoded)) && (!$task->getDeleted())){
 			$em = $this->getDoctrine()->getManager();
 			$task->setDeleted(true);
 			$em->persist($task);
