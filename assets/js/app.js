@@ -4,6 +4,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import ProjectScreen from './screens/ProjectScreen';
 import NewProject from './screens/NewProject';
 import TaskScreen from './screens/TaskScreen';
+import NewUser from './screens/NewUser';
 
 class App extends Component {
 	render() {
@@ -12,6 +13,9 @@ class App extends Component {
 			<Switch>
 				<Route exact path="/">
 					<NewProject/>
+				</Route>
+				<Route path="/signup">
+					<NewUser/>
 				</Route>
 				<Route path="/project/:encodedUuid">
 					<ProjectScreen />

@@ -1,0 +1,82 @@
+import React, { Fragment } from 'react'
+import { useHistory } from 'react-router-dom'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import Form from 'react-bootstrap/Form'
+import FormGroup from 'react-bootstrap/FormGroup'
+import FormControl from 'react-bootstrap/FormControl'
+import FormText from 'react-bootstrap/FormText'
+import { Button } from 'react-bootstrap'
+
+export default function NewUser() {
+	const history = useHistory()
+	
+	const [userEmail, setUserEmail] = React.useState('')
+	const [userMobileNumber, setUserMobileNumber] = React.useState('')
+	const [userPassword, setUserPassword] = React.useState('')
+
+	const createUser = (e) => {
+		e.preventDefault()
+		let user = new FormData()
+		user.append('email', userEmail)
+		user.append('mobileNumber', userMobileNumber)
+		user.append('password', userPassword)
+		const response = fetch('/api/v1/user/create', {
+			method: 'POST',
+			body: user
+		}).then((r)=>r.json()).then((j)=>{
+			console.log(j)
+			if(j.user){
+				//worked
+			}
+		})
+	}
+
+	return (
+		<Fragment>
+			<Container>
+				<Form onSubmit={createUser}>
+					<Row>
+						<Col>
+							<h1>Enter your email OR mobile number to create an account</h1>
+						</Col>
+					</Row>
+					<Row>
+						<Col>
+							<FormGroup>
+								<FormControl id="inputEmail" type="text" placeholder="Email address" onChange={(e)=>{
+									setUserEmail(e.target.value)
+									document.getElementById('inputMobileNumber').required = (0<userEmail.toString().length)
+								}} required={true} />
+								<FormText className="text-muted">Enter your email</FormText>
+							</FormGroup>
+						</Col>
+						<Col>
+							<FormGroup>
+								<FormControl id="inputMobileNumber" type="text" placeholder="Mobile number" onChange={(e)=>{
+									setUserMobileNumber(e.target.value)
+									document.getElementById('inputEmail').required = (0<userMobileNumber.toString().length)
+								}} required={true} />
+								<FormText className="text-muted">Enter your mobile number</FormText>
+							</FormGroup>
+						</Col>
+					</Row>
+					<Row>
+						<Col>
+							<FormGroup>
+								<FormControl type="password" placeholder="Password" onChange={(e)=>setUserPassword(e.target.value)} required={true} />
+								<FormText className="text-muted">Enter a secure password (7 character minimum)</FormText>
+							</FormGroup>
+						</Col>
+					</Row>
+					<Row>
+						<Col>
+							<Button variant="primary" type="submit">Sign up</Button>
+						</Col>
+					</Row>
+				</Form>
+			</Container>
+		</Fragment>
+	)
+}
