@@ -5,16 +5,28 @@
 <div class="container">
 	<div class="row">
 		<div class="col">
+			<h1>Projects</h1>
 			<ul class="list-group">
 			{% for project in projects %}
 				<li class="list-group-item">
 					<div>
 						<h5>{{ project.name }} - {{project.deleted ? 'deleted' : 'active'}}</h5>
-						<a href="/project/{{ project.encodedEditUuid }}">Edit</a>
-						<a href="/project/{{ project.encodedViewUuid }}">View</a>
+						<a href="/project/{{ project.uuid|encode_uuid }}">Edit</a>
 					</div>
 				</li>
 			{% endfor %}
+			</ul>
+		</div>
+		<div class="col">
+			<h1>Expired Projects</h1>
+			<ul class="list-group">
+				{% for project in expiredProjects %}
+					<li class="list-group-item">
+						<div>
+							<h5>{{ project.name }} - exp. {{ project.expireDt|date('m/d/Y g:iA') }}</h5>
+						</div>
+					</li>
+				{% endfor %}
 			</ul>
 		</div>
 	</div>

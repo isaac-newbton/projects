@@ -36,11 +36,7 @@ class ProjectApiController extends AbstractController {
 		return new JsonResponse([
 			"name" => $project->getName(),
 			"uuid" => $project->getUuid(),
-			"viewUuid" => $project->getViewUuid(),
-			"editUuid" => $project->getEditUuid(),
-			"encodedUuid" => $encoder->encode($project->getUuid()),
-			"encodedViewUuid" => $encoder->encode($project->getViewUuid()),
-			"encodedEditUuid" => $encoder->encode($project->getEditUuid())
+			"encodedUuid" => $encoder->encode($project->getUuid())
 		], 200);
 
 	}
@@ -51,25 +47,18 @@ class ProjectApiController extends AbstractController {
 		$data = json_decode($request->getContent());
 		if (!$encodedUuid = $data->encodedUuid) return new JsonResponse("encodedUuid is required");
 
-		// $decodedUuid = $encoder->decode($encodedUuid);
-		$project = $projectRepository->findOneByEncodedEditUuid($encodedUuid) ?? $projectRepository->findOneByEncodedViewUuid($encodedUuid);
+		$project = $projectRepository->findOneByEncodedUuid($encodedUuid);
 
 		if ($project){
-			$permission = $project->getEditUuid() == $encoder->decode($encodedUuid) ? 'edit' : 'view';
-
 			return new JsonResponse([
 				"name" => $project->getName(),
 				"dueDate" => ($project->getDueDate() ? $project->getDueDate()->format('Y-m-d') : null),
 				"encodedUuid" => $encoder->encode($project->getUuid()),
-				"encodedEditUuid" => $encoder->encode($project->getEditUuid()),
-				$permission => true,
 				"tasks" => array_map(function($task) use ($encoder){
 					return [
 						"name" => $task->getName(),
 						"dueDate" => $task->getDueDate() ? $task->getDueDate()->format('y-m-d') : null,
 						"encodedUuid" => $encoder->encode($task->getUuid()),
-						"encodedViewUuid" => $encoder->encode($task->getViewUuid()),
-						"encodedEditUuid" => $encoder->encode($task->getEditUuid()),
 						"active" => !$task->getDeleted() ? true : false,
 					];
 				}, $project->getTasks()->getValues())
@@ -83,7 +72,7 @@ class ProjectApiController extends AbstractController {
 	public function updateProject(Request $request, ProjectRepository $projectRepository, UuidEncoder $encoder){
 		$data = json_decode($request->getContent());
 		if (!$data->project) return new JsonResponse("project is required");
-		$project = $projectRepository->findOneByEncodedEditUuid($data->project->encodedEditUuid);
+		$project = $projectRepository->findOneByEncodedUuid($data->project->encodedUuid);
 
 		if ($project){
 			$em = $this->getDoctrine()->getManager();
@@ -97,15 +86,12 @@ class ProjectApiController extends AbstractController {
 				"name" => $project->getName(),
 				"dueDate" => $project->getDueDate()->format('Y-m-d'),
 				"encodedUuid" => $encoder->encode($project->getUuid()),
-				"encodedEditUuid" => $encoder->encode($project->getEditUuid()),
 				"edit" => true, // this should always be edit if we have access to this endpoint
 				"tasks" => array_map(function($task) use ($encoder){
 					return [
 						"name" => $task->getName(),
 						"dueDate" => $task->getDueDate() ? $task->getDueDate()->format('y-m-d') : null,
 						"encodedUuid" => $encoder->encode($task->getUuid()),
-						"encodedViewUuid" => $encoder->encode($task->getViewUuid()),
-						"encodedEditUuid" => $encoder->encode($task->getEditUuid()),
 						"active" => !$task->getDeleted() ? true : false,
 					];
 				}, $project->getTasks()->getValues())
@@ -120,7 +106,7 @@ class ProjectApiController extends AbstractController {
 		/**
 		 * @var Project
 		 */
-		if(($project = $projectRepository->findOneByEncodedEditUuid($encoded)) && (!$project->getDeleted())){
+		if(($project = $projectRepository->findOneByEncodedUuid($encoded)) && (!$project->getDeleted())){
 			$em = $this->getDoctrine()->getManager();
 			$project->setDeleted(true);
 			if($tasks = $project->getTasks()){

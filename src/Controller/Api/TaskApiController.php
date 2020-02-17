@@ -59,19 +59,13 @@ class TaskApiController extends AbstractController {
 		$task = $taskRepository->findOneByEncodedEditUuid($encodedUuid) ?? $taskRepository->findOneByEncodedViewUuid($encodedUuid);
 		if($task){
 			$project = $task->getProject();
-			$permission = $task->getEditUuid() == $encoder->decode($encodedUuid) ? 'edit' : 'view';
 			return new JsonResponse([
 				'name'=>$task->getName(),
 				'encodedUuid'=>$encoder->encode($task->getUuid()),
-				'encodedEditUuid'=>('edit'===$permission) ? $encoder->encode($task->getEditUuid()) : null,
-				'encodedViewUuid'=>$encoder->encode($task->getViewUuid()),
-				$permission => true,
 				'project'=>($project) ? [
 					'name'=>$project->getName(),
 					'dueDate'=>$project->getDueDate(),
-					'encodedUuid'=>$encoder->encode($project->getUuid()),
-					'encodedViewUuid'=>$encoder->encode($project->getViewUuid()),
-					'encodedEditUuid'=>('edit'===$permission) ? $encoder->encode($project->getEditUuid()) : null
+					'encodedUuid'=>$encoder->encode($project->getUuid())
 				] : null
 			]);
 		}
