@@ -47,7 +47,7 @@ export default function NewUser() {
 							<FormGroup>
 								<FormControl id="inputEmail" type="text" placeholder="Email address" onChange={(e)=>{
 									setUserEmail(e.target.value)
-									document.getElementById('inputMobileNumber').required = (0<userEmail.toString().length)
+									document.getElementById('inputMobileNumber').required = (0==e.target.value.toString().length)
 								}} required={true} />
 								<FormText className="text-muted">Enter your email</FormText>
 							</FormGroup>
@@ -56,7 +56,7 @@ export default function NewUser() {
 							<FormGroup>
 								<FormControl id="inputMobileNumber" type="text" placeholder="Mobile number" onChange={(e)=>{
 									setUserMobileNumber(e.target.value)
-									document.getElementById('inputEmail').required = (0<userMobileNumber.toString().length)
+									document.getElementById('inputEmail').required = (0==e.target.value.toString().length)
 								}} required={true} />
 								<FormText className="text-muted">Enter your mobile number</FormText>
 							</FormGroup>
