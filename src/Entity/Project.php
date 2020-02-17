@@ -13,8 +13,6 @@ use Ramsey\Uuid\Uuid;
 class Project
 {
     use EntityIdTrait;
-    use EntityViewUuidTrait;
-    use EntityEditUuidTrait;
     use EntityDeletedTrait;
 
     /**
@@ -35,8 +33,6 @@ class Project
     public function __construct()
     {
         $this->uuid = Uuid::uuid4();
-        $this->viewUuid = Uuid::uuid4();
-        $this->editUuid = Uuid::uuid4();
         $this->deleted = false;
         $this->tasks = new ArrayCollection();
     }
