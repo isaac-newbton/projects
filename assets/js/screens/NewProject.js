@@ -26,8 +26,8 @@ function NewProject() {
 			method: 'POST',
 			body: project
 		}).then((r)=>r.json()).then((j)=>{
-			if(j.encodedEditUuid){
-				goToProject(j.encodedEditUuid)
+			if(j.encodedUuid){
+				goToProject(j.encodedUuid)
 			}
 		})
 	}

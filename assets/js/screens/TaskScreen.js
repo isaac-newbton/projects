@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import EditTask from './taskView/EditTask';
-import ViewTask from './taskView/ViewTask';
-import ProjectScreen from './ProjectScreen';
 
 const TaskScreen = props => {
 	const { encodedUuid } = useParams('encodedUuid')
@@ -48,8 +46,7 @@ const TaskScreen = props => {
 
 	if(isLoading===true) return 'loading...'
 	if(task && 'name' in task){
-		if(task.edit) return <EditTask updateTask={updateTaskHandler} task={task}/>
-		return <ViewTask task={task}/>
+		return <EditTask updateTask={updateTaskHandler} task={task}/>
 	}
 	return 'TODO: 404 for task'
 }
