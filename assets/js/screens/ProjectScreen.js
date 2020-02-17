@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Container from 'react-bootstrap/Container';
-import { Row, Col } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import EditProject from './projectView/EditProject';
-import ViewProject from './projectView/ViewProject';
 
 const ProjectScreen = props => {
 	const { encodedUuid } = useParams('encodedUuid');
@@ -56,8 +53,7 @@ const ProjectScreen = props => {
 
 	if (isLoading === true) return "loading..."
 	if (project && 'name' in project) {
-		if (project.edit) return <EditProject updateProject={updateProjectHandler} refreshProject={fetchProject} project={project}/>
-		return <ViewProject project={project}/>
+		return <EditProject updateProject={updateProjectHandler} refreshProject={fetchProject} project={project}/>
 	}
 	return "TODO: Handle this with a 404 component or something similar"
 }
