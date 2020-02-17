@@ -86,7 +86,7 @@ class TaskApiController extends AbstractController {
 		/**
 		 * @var Task
 		 */
-		if(($task = $taskRepository->findOneByEncodedEditUuid($encoded)) && (!$task->getDeleted())){
+		if(($task = $taskRepository->findOneByEncodedUuid($encoded)) && (!$task->getDeleted())){
 			$em = $this->getDoctrine()->getManager();
 			$task->setDeleted(true);
 			$em->persist($task);
