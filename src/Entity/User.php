@@ -51,11 +51,17 @@ class User implements UserInterface
      */
     private $mobileNumberVerified;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Task", mappedBy="assignedUser")
+     */
+    private $tasks;
+
     public function __construct(){
         $this->uuid = Uuid::uuid4();
         $this->projects = new ArrayCollection();
         $this->emailVerified = false;
         $this->mobileNumberVerified = false;
+        $this->tasks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -205,5 +211,36 @@ class User implements UserInterface
 
     public function isVerified(): bool{
         return ($this->getEmailVerified() || $this->getMobileNumberVerified());
+    }
+
+    /**
+     * @return Collection|Task[]
+     */
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
+    }
+
+    public function addTask(Task $task): self
+    {
+        if (!$this->tasks->contains($task)) {
+            $this->tasks[] = $task;
+            $task->setAssignedUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTask(Task $task): self
+    {
+        if ($this->tasks->contains($task)) {
+            $this->tasks->removeElement($task);
+            // set the owning side to null (unless already changed)
+            if ($task->getAssignedUser() === $this) {
+                $task->setAssignedUser(null);
+            }
+        }
+
+        return $this;
     }
 }
