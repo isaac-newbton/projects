@@ -29,6 +29,11 @@ class Task
      */
     private $project;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="tasks")
+     */
+    private $assignedUser;
+
     public function __construct()
     {
         $this->uuid = Uuid::uuid4();
@@ -67,6 +72,18 @@ class Task
     public function setProject(?Project $project): self
     {
         $this->project = $project;
+
+        return $this;
+    }
+
+    public function getAssignedUser(): ?User
+    {
+        return $this->assignedUser;
+    }
+
+    public function setAssignedUser(?User $assignedUser): self
+    {
+        $this->assignedUser = $assignedUser;
 
         return $this;
     }
