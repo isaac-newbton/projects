@@ -7,7 +7,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\ProjectRepository;
 use App\Service\UserPasswordService;
+use Mailgun\Mailgun;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * / TODO: isGranted("ROLE_ADMIN")
@@ -46,5 +48,27 @@ class AdminController extends AbstractController {
 		return $this->render("admin/random_password.html.twig", [
 			"password"=>$password
 		]);
+	}
+
+	/**
+	 * @Route("/admin/testemail/{to}", name="admin_test_email")
+	 */
+	public function testEmail(string $to){
+		/**
+		 * @var Mailgun
+		 */
+		$mg = Mailgun::create('287c115daacc77b92679a42a19c1b7db-af6c0cec-aebd1e22');
+		$sent = $mg->messages()->send('mail.lifeprojex.com', [
+			'from'=>'test@mail.lifeprojex.com',
+			'to'=>$to,
+			'subject'=>'Test email from LifeProjeX',
+			'html'=>$this->renderView('email/dev/test.html.twig', [
+				'subject'=>'Test email',
+				'var1'=>'this is the value for var1',
+				'var2'=>10000,
+				'var3'=>'Variable #3'
+			])
+		]);
+		return new Response("<html><body>Sent to: $to<br>Success: " . ($sent ? 'Y' : 'N') . "</body></html>", 200);
 	}
 }

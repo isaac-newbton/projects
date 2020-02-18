@@ -1,0 +1,12 @@
+{% extends "email/base.html.twig" %}
+
+{% block body %}
+	<h1>Test</h1>
+	<p>Test email</p>
+	<h1>Variables:</h1>
+	<ul>
+		<li>var1: {{ var1 ?? 'null' }}</li>
+		<li>var2: {{ var2 ?? 'null' }}</li>
+		<li>var3: {{ var3 ?? 'null' }}</li>
+	</ul>
+{% endblock %}
