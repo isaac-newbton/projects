@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 use App\Entity\Comment;
 use App\Entity\Task;
 use App\Repository\TaskRepository;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,6 +26,7 @@ class CommentApiController extends AbstractController {
 		$comment = new Comment();
 		$comment->setTask($task);
 		$comment->setUser($this->getUser());
+		$comment->setTimestamp(new DateTime());
 		$comment->setContent($data->content);
 
 		$em->persist($comment);
@@ -35,10 +37,17 @@ class CommentApiController extends AbstractController {
 	}
 
 	/**
-	 * @Route("/api/v1/task/comments", methods={"POST"})
+	 * @Route("/api/v1/task/{taskUuid}comments", methods={"POST"})
 	 */
-	public function taskComments(){
-		return new JsonResponse("TODO: return all comments for specified task");
+	public function taskComments(string $taskUuid, TaskRepository $taskRepository){
+		if (!$task = $taskRepository->findOneByEncodedUuid($taskUuid)) return new JsonResponse(['error' => 'task not found']);
+		return new JsonResponse(array_map(function ($comment){
+			return [
+				// TODO we need to return a user here as well somehow
+				"content" => $comment->getContent(),
+				"timestamp" => $comment->getTimeStamp(),
+			];
+		},$task->getComments()));
 	}
 
 	/**
