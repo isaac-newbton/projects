@@ -58,7 +58,7 @@ class TaskApiController extends AbstractController {
 				'comments' => array_map(function($comment){
 					return [
 						'content' => $comment->getContent(),
-						'timestamp' => $comment->getTimeStamp(),
+						'timestamp' => $comment->getTimeStamp()->format('g:ia F dS Y'),
 						'user' => array_filter([
 							'mobileNumber' => $comment->getUser()->getMobileNumber() ?? null,
 							'email' => $comment->getUser()->getEmail() ?? null,
