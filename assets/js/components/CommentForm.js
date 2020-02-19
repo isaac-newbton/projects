@@ -7,6 +7,7 @@ const CommentForm = ({handleSubmit}) => {
 
 	const handleFormSubmit = e => {
 		e.preventDefault()
+		setComment('')
 		handleSubmit(comment)
 	}
 	if (handleSubmit){

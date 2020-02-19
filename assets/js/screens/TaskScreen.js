@@ -44,9 +44,23 @@ const TaskScreen = props => {
 		}
 	}
 
+	const HandleCommentFormSubmit = props => {
+		fetch("/api/v1/comment/create", {
+			method: 'POST',
+			body: JSON.stringify({
+				taskUuid: task.encodedUuid,
+				content : props,
+			}),
+		})
+		.then(resp => resp.json())
+		.then(resp => {
+			if(!resp.error) fetchTask()
+		})
+	}
+
 	if(isLoading===true) return 'loading...'
 	if(task && 'name' in task){
-		return <EditTask updateTask={updateTaskHandler} task={task}/>
+		return <EditTask updateTask={updateTaskHandler} task={task} HandleCommentFormSubmit={HandleCommentFormSubmit}/>
 	}
 	return 'TODO: 404 for task'
 }
