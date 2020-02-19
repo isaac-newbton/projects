@@ -2,9 +2,11 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class SecurityController extends AbstractController{
 	/**
@@ -20,15 +22,10 @@ class SecurityController extends AbstractController{
 	}
 
 	/**
-	 * @Route("/admin/login", name="app_login")
+	 * @Route("/api/v1/auth", name="react_checker")
 	 */
-	public function formLogin(AuthenticationUtils $authenticationUtils){
-		$error = $authenticationUtils->getLastAuthenticationError();
-		$lastUsername = $authenticationUtils->getLastUsername();
-
-		return $this->render('dev/login.html.twig', [
-			'last_username'=>$lastUsername,
-			'error'=>$error
-		]);
+	public function reactSimpleAuth(AuthorizationCheckerInterface $auth){
+		// TODO: this should return something unique that cant be spoofed on the client side
+		return new JsonResponse($auth->isGranted('IS_AUTHENTICATED_FULLY'));
 	}
 }
