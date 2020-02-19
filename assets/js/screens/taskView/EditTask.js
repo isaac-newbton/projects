@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/Col';
 import CommentForm from '../../components/CommentForm';
 import { ListGroup, Badge } from 'react-bootstrap';
 import UserAuthenticatedComponent from '../../components/UserAuthenticated';
+import FileUploadForm from '../../components/FileUploadForm';
 
 const EditTask = props => {
 
@@ -24,6 +25,7 @@ const EditTask = props => {
 				<Col>
 					<UserAuthenticatedComponent>
 						<CommentForm handleSubmit={props.HandleCommentFormSubmit}/>
+						<FileUploadForm handleSubmit={props => console.log(props)} />
 					</UserAuthenticatedComponent>
 				</Col>
 			</Row>
