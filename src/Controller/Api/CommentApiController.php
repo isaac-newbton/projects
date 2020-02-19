@@ -37,21 +37,7 @@ class CommentApiController extends AbstractController {
 	}
 
 	/**
-	 * @Route("/api/v1/task/{taskUuid}comments", methods={"POST"})
-	 */
-	public function taskComments(string $taskUuid, TaskRepository $taskRepository){
-		if (!$task = $taskRepository->findOneByEncodedUuid($taskUuid)) return new JsonResponse(['error' => 'task not found']);
-		return new JsonResponse(array_map(function ($comment){
-			return [
-				// TODO we need to return a user here as well somehow
-				"content" => $comment->getContent(),
-				"timestamp" => $comment->getTimeStamp(),
-			];
-		},$task->getComments()));
-	}
-
-	/**
-	 * @Route("/api/v1/comment/create", methods={"POST"})
+	 * @Route("/api/v1/comment/delete", methods={"POST"})
 	 */
 	public function deleteComment(){
 		return new JsonResponse("TODO: delete comment");
