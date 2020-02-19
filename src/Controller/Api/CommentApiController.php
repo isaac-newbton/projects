@@ -2,12 +2,12 @@
 namespace App\Controller\Api;
 
 use App\Entity\Comment;
-use App\Entity\Task;
 use App\Repository\TaskRepository;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 class CommentApiController extends AbstractController {
 
