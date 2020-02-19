@@ -4,6 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import CommentForm from '../../components/CommentForm';
 import { ListGroup, Badge } from 'react-bootstrap';
+import UserAuthenticatedComponent from '../../components/UserAuthenticated';
 
 const EditTask = props => {
 
@@ -21,7 +22,9 @@ const EditTask = props => {
 			</Row>
 			<Row>
 				<Col>
-					<CommentForm handleSubmit={props.HandleCommentFormSubmit}/>
+					<UserAuthenticatedComponent>
+						<CommentForm handleSubmit={props.HandleCommentFormSubmit}/>
+					</UserAuthenticatedComponent>
 				</Col>
 			</Row>
 
