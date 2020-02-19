@@ -28,7 +28,7 @@ class Comment
     private $user;
 
     /**
-     * @ORM\Column(type="time")
+     * @ORM\Column(type="datetime")
      */
     private $timestamp;
 
