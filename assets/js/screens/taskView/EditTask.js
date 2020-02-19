@@ -31,9 +31,9 @@ const EditTask = props => {
 			<Row>
 				<Col>
 				<ListGroup>
-					{props.task.comments.map(comment => {
+					{props.task.comments.map((comment,index) => {
 						return (
-							<ListGroup.Item>
+							<ListGroup.Item key={index}>
 								<p>{comment.content}</p>
 								<span className="small"><b>{comment.user.email ?? comment.user.mobileNumber}</b> at {comment.timestamp}</span>
 							</ListGroup.Item>
