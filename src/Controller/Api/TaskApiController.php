@@ -54,7 +54,13 @@ class TaskApiController extends AbstractController {
 					'name'=>$project->getName(),
 					'dueDate'=>$project->getDueDate(),
 					'encodedUuid'=>$encoder->encode($project->getUuid())
-				] : null
+				] : null,
+				'comments' => array_map(function($comment){
+					return [
+						'content' => $comment->getContent(),
+						'timestamp' => $comment->getTimeStamp(),
+					];
+				},$task->getComments()->getValues())
 			]);
 		}
 		return new JsonResponse(['error'=>'task not found for that uuid']);
