@@ -9,7 +9,7 @@ const FileUploadForm = ({handleSubmit}) => {
 
 	const handleFormSubmit = e => {
 		e.preventDefault()
-		console.log(files)
+		handleSubmit(files)
 	}
 
 	const UploadButton = () => files.length > 0 ? <Button type="submit">Upload Selected Files</Button> : null;
