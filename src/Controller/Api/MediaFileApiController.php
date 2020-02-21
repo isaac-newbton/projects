@@ -12,6 +12,7 @@ class MediaFileApiController extends AbstractController {
 	 * @Route("/api/v1/file/upload", methods={"POST"})
 	 */
 	public function uploadFile(Request $request){
-		return new JsonResponse($request->request);
+		$params = $request->files->all();
+		return new JsonResponse($params);
 	}
 }

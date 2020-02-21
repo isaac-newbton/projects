@@ -60,14 +60,18 @@ const TaskScreen = props => {
 
 	const HandleFileUploadSubmit = props => {
 		fetch("/api/v1/file/upload", {
-			headers: {
-				// 'Content-Type': 'application/json'
-				'Content-Type': 'application/x-www-form-urlencoded',
-			  },
 			method: "POST",
 			body: props
 		})
-		.then(resp => resp.json())
+		.then(resp => {
+			console.log('!')
+			console.log(resp)
+			console.log(resp.body)
+			console.log('!')
+			let j = resp.json()
+			console.log(j)
+			return j
+		})
 		.then(resp => {
 			if (!resp.error) console.log(resp)
 		})
