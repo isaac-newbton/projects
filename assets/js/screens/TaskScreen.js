@@ -63,15 +63,7 @@ const TaskScreen = props => {
 			method: "POST",
 			body: props
 		})
-		.then(resp => {
-			console.log('!')
-			console.log(resp)
-			console.log(resp.body)
-			console.log('!')
-			let j = resp.json()
-			console.log(j)
-			return j
-		})
+		.then(resp => resp.json() )
 		.then(resp => {
 			if (!resp.error) console.log(resp)
 		})

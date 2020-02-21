@@ -9,7 +9,6 @@ const FileUploadForm = ({handleSubmit}) => {
 		for (const file of fileList){
 			fileData.append('file', file, file.name)
 		}
-		console.log(...fileData)
 		handleSubmit(fileData)
 	}
 
@@ -19,7 +18,7 @@ const FileUploadForm = ({handleSubmit}) => {
 			<Form>
 				<Form.Group controlId="fileUpload">
 					<Form.Label controlId="fileUpload" className="btn btn-link">Upload File</Form.Label>
-					<Form.Control multiple={true} style={{display:'none'}} placeholder="Upload" onChange={e => handleAddFiles(e.target.files)} type="file"></Form.Control>
+					<Form.Control style={{display:'none'}} placeholder="Upload" onChange={e => handleAddFiles(e.target.files)} type="file"></Form.Control>
 				</Form.Group>
 			</Form>
 		)

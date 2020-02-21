@@ -3,18 +3,14 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MediaFileRepository")
  */
 class MediaFile
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    use EntityIdTrait;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -36,9 +32,9 @@ class MediaFile
      */
     private $mimeType;
 
-    public function getId(): ?int
+    public function __construct()
     {
-        return $this->id;
+        $this->uuid = Uuid::uuid4();
     }
 
     public function getName(): ?string
