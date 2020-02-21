@@ -16,7 +16,7 @@ class CommentApiController extends AbstractController {
 	 */
 	public function createComment(Request $request, TaskRepository $taskRepository){
 		$data = json_decode($request->getContent());
-		if (!$this->getUser()) return new JsonResponse(['error' => 'user must be authenticated']);
+		// if (!$this->getUser()) return new JsonResponse(['error' => 'user must be authenticated']);
 		if (!$data->content) return new JsonResponse(['error' => 'content is a required']);
 		if (!$data->taskUuid) return new JsonResponse(['error' => 'task uuid is required']);
 

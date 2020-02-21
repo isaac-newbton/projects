@@ -23,10 +23,10 @@ const EditTask = props => {
 			</Row>
 			<Row>
 				<Col>
-					<UserAuthenticatedComponent>
+					{/* <UserAuthenticatedComponent> */}
 						<CommentForm handleSubmit={props.HandleCommentFormSubmit}/>
-						<FileUploadForm handleSubmit={props => console.log(props)} />
-					</UserAuthenticatedComponent>
+						<FileUploadForm handleSubmit={props.HandleFileUploadSubmit} />
+					{/* </UserAuthenticatedComponent> */}
 				</Col>
 			</Row>
 
