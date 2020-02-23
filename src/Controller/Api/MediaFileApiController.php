@@ -20,7 +20,6 @@ class MediaFileApiController extends AbstractController {
 	public function uploadFile(Request $request){
 		if (!$files = ($request->files->all())) return new JsonResponse(['error' => 'files required']);
 		if (!$encodedUserUuid = $this->getUser()->getEncodedUuid()) return new JsonResponse(['error' => 'user is not authenticated']);
-		$encodedUserUuid = 'asdf';
 
 		$em = $this->getDoctrine()->getManager();
 		/**
@@ -37,15 +36,17 @@ class MediaFileApiController extends AbstractController {
 			$mediaFile->setPath($this->getParameter('mediaFiles_directory').$fileName);
 			$mediaFile->setTimestamp(new DateTime('now', new DateTimeZone('AMERICA/NEW_YORK')));
 			$mediaFile->setMimeType($file->getMimeType());
-			//FIXME: banking on this always being able to flush is a bad idea
-			$em->merge($mediaFile);
 
-			$file->move("{$this->getParameter('mediaFiles_directory')}$encodedUserUuid", $fileName);
+			$em->merge($mediaFile);
 		}
 		
-		$em->flush();
+		try {
+			$em->flush(); // next line does happen if this fails, but this should be more graceful
+			$file->move("{$this->getParameter('mediaFiles_directory')}$encodedUserUuid", $fileName);
+			return new JsonResponse(['success'], 200);
+		} catch (Exception $e){
+			return new JsonResponse(['error' => 'unable to create the file', 'message' => $e->getMessage()], 200);
+		}
 
-
-		return new JsonResponse(['success'], 200);
 	}
 }
