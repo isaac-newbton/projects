@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Task;
 use App\Entity\Project;
 use App\Repository\ProjectRepository;
+use Symfony\Component\Finder\Finder;
 
 class TaskApiController extends AbstractController {
 	/**
@@ -41,10 +42,26 @@ class TaskApiController extends AbstractController {
 		$data = json_decode($request->getContent());
 		if(!$encodedUuid = $data->encodedUuid) return new JsonResponse(['error'=>'encodedUuid required'], 400);
 
+		// $files = [];
+		// // find all files in the current directory
+		// $finder = new Finder();
+		// $finder->files()->in($this->getParameter('mediaFiles_directory'));
+
+		// foreach ($finder as $file) {
+		// 	$absoluteFilePath = $file->getRealPath();
+		// 	$fileNameWithExtension = $file->getRelativePathname();
+		// 	$files[] = ['name' => $fileNameWithExtension, 'path' => $absoluteFilePath];
+		// }
+
 		/**
 		 * @var Task|null
 		 */
 		$task = $taskRepository->findOneByEncodedUuid($encodedUuid);
+		// $finder->files()->name(array_map(function($file){
+		// 	return $file->getName();
+		// }, $task->getMediaFiles()->getValues()));
+
+
 		if($task){
 			$project = $task->getProject();
 			return new JsonResponse([
@@ -66,7 +83,14 @@ class TaskApiController extends AbstractController {
 							return isset($item) && !empty($item) ?? $item;
 						}),
 					];
-				},$task->getComments()->getValues())
+				}, $task->getComments()->getValues()),
+				"files" => array_map(function($file){
+					return [
+						'name' => $file->getName(),
+						'path' => $file->getPath(),
+					];
+				}, $task->getMediaFiles()->getValues())
+
 			]);
 		}
 		return new JsonResponse(['error'=>'task not found for that uuid']);

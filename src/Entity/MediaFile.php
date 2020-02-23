@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 
@@ -32,9 +34,15 @@ class MediaFile
      */
     private $mimeType;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Task", mappedBy="mediaFiles")
+     */
+    private $tasks;
+
     public function __construct()
     {
         $this->uuid = Uuid::uuid4();
+        $this->tasks = new ArrayCollection();
     }
 
     public function getName(): ?string
@@ -81,6 +89,34 @@ class MediaFile
     public function setMimeType(string $mimeType): self
     {
         $this->mimeType = $mimeType;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Task[]
+     */
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
+    }
+
+    public function addTask(Task $task): self
+    {
+        if (!$this->tasks->contains($task)) {
+            $this->tasks[] = $task;
+            $task->addMediaFile($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTask(Task $task): self
+    {
+        if ($this->tasks->contains($task)) {
+            $this->tasks->removeElement($task);
+            $task->removeMediaFile($this);
+        }
 
         return $this;
     }

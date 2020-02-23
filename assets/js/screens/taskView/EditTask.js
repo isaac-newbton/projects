@@ -3,7 +3,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import CommentForm from '../../components/CommentForm';
-import { ListGroup, Badge } from 'react-bootstrap';
+import { ListGroup, Badge, Image, Card } from 'react-bootstrap';
 import UserAuthenticatedComponent from '../../components/UserAuthenticated';
 import FileUploadForm from '../../components/FileUploadForm';
 
@@ -19,6 +19,15 @@ const EditTask = props => {
 							{props.task.project.name}
 						</a>
 					</h2>
+				</Col>
+			</Row>
+			<Row>
+				<Col>
+					<Card>
+						<h5>Attached Files</h5>
+						{/* TODO: Link to the file */}
+						{props.task.files.map(file => <p>{file.name}</p>)}
+					</Card>
 				</Col>
 			</Row>
 			<Row>
