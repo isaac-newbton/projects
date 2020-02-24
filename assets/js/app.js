@@ -33,6 +33,19 @@ const App = () => {
 		.then(resp => !resp.error ? setUser(resp) : console.log(resp))
 	}
 
+	const LogOut = props => {
+		const [loggedOut, setLoggedOut] = useState(null)
+		fetch("/api/v1/logout")
+		.then(resp => resp.json())
+		.then(resp => {
+			if(!resp.error){
+				setLoggedOut(true)
+				setUser(null)
+			}
+		})
+		return loggedOut ? <p>Logged out</p> : <Redirect to="/login" />
+	}
+
 	return (
 		<BrowserRouter>
 		<Switch>
@@ -44,6 +57,10 @@ const App = () => {
 			</Route>
 			<Route path="/login">
 				{user ? <Redirect to="/" /> : <SignIn handleLogin={handleLogin} />}
+			</Route>
+			<Route path="/logout">
+				<LogOut />
+				{/* {user ? <LogOut handleLogout={handleLogout} /> : <Redirect to="/login" />} */}
 			</Route>
 			<Route path="/project/:encodedUuid">
 				<ProjectScreen />

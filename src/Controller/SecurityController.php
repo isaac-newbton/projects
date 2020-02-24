@@ -6,8 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class SecurityController extends AbstractController{
 	/**
@@ -40,6 +38,16 @@ class SecurityController extends AbstractController{
 			'error' => 'user is not authenticated'
 		]);
     }
+	
+	/**
+     * @Route("/api/v1/logout", name="api_logout", methods={"GET"})
+     */
+    public function logout()
+    {
+		$this->get('security.token_storage')->setToken(null);
+		$this->get('session')->invalidate();
+		return new JsonResponse(['success'], 200);
+	}
 	
 	/**
 	 * @Route("/api/v1/auth", name="react_checker")
