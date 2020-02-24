@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { useState } from 'react';
 
 const SignIn = props => {
@@ -16,17 +16,23 @@ const SignIn = props => {
 	}
 
 	return (
-		<Form onSubmit={e => handleSubmit(e)}>
-			<Form.Group>
-				<Form.Label>Mobile Number or Email Address</Form.Label>
-				<Form.Control type="text" value={login} onChange={e => setLogin(e.target.value)}/>
+		<Container>
+			<Row>
+				<Col>
+					<Form onSubmit={e => handleSubmit(e)}>
+						<Form.Group>
+							<Form.Label>Mobile Number or Email Address</Form.Label>
+							<Form.Control type="text" value={login} onChange={e => setLogin(e.target.value)}/>
 
-				<Form.Label>Password</Form.Label>
-				<Form.Control type="password" value={password} onChange={e => setPassword(e.target.value)} />
+							<Form.Label>Password</Form.Label>
+							<Form.Control type="password" value={password} onChange={e => setPassword(e.target.value)} />
 
-				<Button type="submit">Login</Button>
-			</Form.Group>
-		</Form>
+							<Button type="submit">Login</Button>
+						</Form.Group>
+					</Form>
+				</Col>
+			</Row>
+		</Container>
 	)
 }
 

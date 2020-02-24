@@ -10,16 +10,17 @@ import { useEffect } from 'react';
 
 const App = () => {
 
-	const [user, setUser] = useState()
+	const [user, setUser] = useState(null)
 
 	useEffect(() => {
+		// TODO: put this in an auth service component
 		fetch("/api/v1/auth")
 		.then(resp => resp.json())
-		.then(resp => resp.error ?? setUser(resp))
-	}, [])
-
-
+		.then(resp => !resp.error ? setUser(resp) : null)
+	} , [])
+	
 	const handleLogin = data => {
+		// TODO: put this in an auth service component ?
 		fetch("/api/v1/login", {
 			method: "POST",
 			headers: {
@@ -29,9 +30,7 @@ const App = () => {
 			body: JSON.stringify(data)
 		})
 		.then(resp => resp.json())
-		.then(resp => {
-			resp.error ? setUser(resp) : console.log(resp)
-		})
+		.then(resp => !resp.error ? setUser(resp) : console.log(resp))
 	}
 
 	return (
