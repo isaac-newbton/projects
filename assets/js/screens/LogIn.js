@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { useState } from 'react';
 
-const SignIn = props => {
+const LogIn = props => {
 
 	const [login, setLogin] = useState('');
 	const [password, setPassword] = useState('');
@@ -36,4 +36,4 @@ const SignIn = props => {
 	)
 }
 
-export default SignIn
+export default LogIn

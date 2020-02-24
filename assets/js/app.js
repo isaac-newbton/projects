@@ -5,8 +5,9 @@ import ProjectScreen from './screens/ProjectScreen';
 import NewProject from './screens/NewProject';
 import TaskScreen from './screens/TaskScreen';
 import NewUser from './screens/NewUser';
-import SignIn from './screens/SignIn';
+import SignIn from './screens/LogIn';
 import { useEffect } from 'react';
+import LogIn from './screens/LogIn';
 
 const App = () => {
 
@@ -40,10 +41,9 @@ const App = () => {
 		.then(resp => {
 			if(!resp.error){
 				setLoggedOut(true)
-				setUser(null)
 			}
 		})
-		return loggedOut ? <p>Logged out</p> : <Redirect to="/login" />
+		return loggedOut ? <Redirect to="/login" /> : <p>Logging out...</p>
 	}
 
 	return (
@@ -56,11 +56,10 @@ const App = () => {
 				<NewUser/>
 			</Route>
 			<Route path="/login">
-				{user ? <Redirect to="/" /> : <SignIn handleLogin={handleLogin} />}
+				{user ? <Redirect to="/" /> : <LogIn handleLogin={handleLogin} />}
 			</Route>
 			<Route path="/logout">
 				<LogOut />
-				{/* {user ? <LogOut handleLogout={handleLogout} /> : <Redirect to="/login" />} */}
 			</Route>
 			<Route path="/project/:encodedUuid">
 				<ProjectScreen />
