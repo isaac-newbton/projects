@@ -3,8 +3,10 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import CommentForm from '../../components/CommentForm';
-import { ListGroup, Badge } from 'react-bootstrap';
+import { ListGroup, Badge, Image, Card } from 'react-bootstrap';
 import UserAuthenticatedComponent from '../../components/UserAuthenticated';
+import FileUploadForm from '../../components/FileUploadForm';
+import FilesList from '../../components/FilesList';
 
 const EditTask = props => {
 
@@ -22,8 +24,15 @@ const EditTask = props => {
 			</Row>
 			<Row>
 				<Col>
+					<h5>Attached Files</h5>
+					<FilesList files={props.task.files}/>
+				</Col>
+			</Row>
+			<Row>
+				<Col>
 					<UserAuthenticatedComponent>
 						<CommentForm handleSubmit={props.HandleCommentFormSubmit}/>
+						<FileUploadForm handleSubmit={props.HandleFileUploadSubmit} />
 					</UserAuthenticatedComponent>
 				</Col>
 			</Row>

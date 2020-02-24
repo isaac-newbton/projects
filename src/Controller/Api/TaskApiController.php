@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Task;
 use App\Entity\Project;
 use App\Repository\ProjectRepository;
+use Symfony\Component\Finder\Finder;
 
 class TaskApiController extends AbstractController {
 	/**
@@ -45,6 +46,8 @@ class TaskApiController extends AbstractController {
 		 * @var Task|null
 		 */
 		$task = $taskRepository->findOneByEncodedUuid($encodedUuid);
+
+
 		if($task){
 			$project = $task->getProject();
 			return new JsonResponse([
@@ -66,7 +69,14 @@ class TaskApiController extends AbstractController {
 							return isset($item) && !empty($item) ?? $item;
 						}),
 					];
-				},$task->getComments()->getValues())
+				}, $task->getComments()->getValues()),
+				"files" => array_map(function($file){
+						return [
+							'name' => $file->getName(),
+							'encodedUuid' => UuidEncoder::encode($file->getUuid()),
+						];
+				}, $task->getMediaFiles()->getValues())
+
 			]);
 		}
 		return new JsonResponse(['error'=>'task not found for that uuid']);

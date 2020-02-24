@@ -13,8 +13,10 @@ const CommentForm = ({handleSubmit}) => {
 	if (handleSubmit){
 		return (
 			<Form onSubmit={e => handleFormSubmit(e)}>
-			<Form.Control onChange={e => setComment(e.target.value)} placeholder="Write a new comment..." as="textarea" value={comment}></Form.Control>
-				<Button type="submit" className="float-right">Submit</Button>
+				<Form.Group>
+					<Form.Control onChange={e => setComment(e.target.value)} placeholder="Write a new comment..." as="textarea" value={comment}></Form.Control>
+					<Button type="submit">Submit</Button>
+				</Form.Group>
 			</Form>
 		)
 	}

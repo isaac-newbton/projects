@@ -57,10 +57,21 @@ const TaskScreen = props => {
 			if(!resp.error) fetchTask()
 		})
 	}
+	
+	const HandleFileUploadSubmit = props => {
+		fetch(`/api/v1/file/upload/${task.encodedUuid}`, {
+			method: "POST",
+			body: props
+		})
+		.then(resp => resp.json())
+		.then(resp => {
+			!resp.error ? fetchTask() : console.log(resp)
+		})
+	}
 
 	if(isLoading===true) return 'loading...'
 	if(task && 'name' in task){
-		return <EditTask updateTask={updateTaskHandler} task={task} HandleCommentFormSubmit={HandleCommentFormSubmit}/>
+		return <EditTask updateTask={updateTaskHandler} task={task} HandleFileUploadSubmit={HandleFileUploadSubmit} HandleCommentFormSubmit={HandleCommentFormSubmit}/>
 	}
 	return 'TODO: 404 for task'
 }
