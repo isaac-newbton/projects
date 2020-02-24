@@ -2,12 +2,15 @@
 namespace App\Controller\Api;
 
 use App\Entity\MediaFile;
+use App\Repository\MediaFileRepository;
 use App\Repository\TaskRepository;
 use DateTime;
 use DateTimeZone;
 use Exception;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\File\Stream;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -39,7 +42,7 @@ class MediaFileApiController extends AbstractController {
 			
 			$mediaFile->setName($fileName);
 			$mediaFile->addTask($task);
-			$mediaFile->setPath($this->getParameter('mediaFiles_directory').$fileName);
+			$mediaFile->setPath($this->getParameter('mediaFiles_directory').$encodedUserUuid.'/'.$fileName);
 			$mediaFile->setTimestamp(new DateTime('now', new DateTimeZone('AMERICA/NEW_YORK')));
 			$mediaFile->setMimeType($file->getMimeType());
 			
@@ -56,5 +59,14 @@ class MediaFileApiController extends AbstractController {
 			return new JsonResponse(['error' => 'unable to create the file', 'message' => $e->getMessage()], 200);
 		}
 
+	}
+
+	/**
+	 * @Route("/api/v1/file/{encodedUuid}")
+	 */
+	public function viewFile(string $encodedUuid, MediaFileRepository $mediaFileRepository){
+		if (!$file = $mediaFileRepository->findOneByEncodedUuid($encodedUuid)) return $this->redirectToRoute("index", [], 404); // file not found
+
+		return new BinaryFileResponse($file->getPath());
 	}
 }

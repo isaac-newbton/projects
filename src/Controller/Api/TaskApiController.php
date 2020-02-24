@@ -70,12 +70,12 @@ class TaskApiController extends AbstractController {
 						}),
 					];
 				}, $task->getComments()->getValues()),
-				"files" => array_map(function($file, $encoder){
-					return [
-						'name' => $file->getName(),
-						'encodedUuid' => $encoder->encode($file->getUuid()),
-					];
-				}, $task->getMediaFiles()->getValues(), [$encoder])
+				"files" => array_map(function($file){
+						return [
+							'name' => $file->getName(),
+							'encodedUuid' => UuidEncoder::encode($file->getUuid()),
+						];
+				}, $task->getMediaFiles()->getValues())
 
 			]);
 		}
