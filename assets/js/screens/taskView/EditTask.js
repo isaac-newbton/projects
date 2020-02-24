@@ -6,6 +6,7 @@ import CommentForm from '../../components/CommentForm';
 import { ListGroup, Badge, Image, Card } from 'react-bootstrap';
 import UserAuthenticatedComponent from '../../components/UserAuthenticated';
 import FileUploadForm from '../../components/FileUploadForm';
+import FilesList from '../../components/FilesList';
 
 const EditTask = props => {
 
@@ -23,19 +24,16 @@ const EditTask = props => {
 			</Row>
 			<Row>
 				<Col>
-					<Card>
-						<h5>Attached Files</h5>
-						{/* TODO: Link to the file */}
-						{props.task.files.map(file => <p>{file.name}</p>)}
-					</Card>
+					<h5>Attached Files</h5>
+					<FilesList files={props.task.files}/>
 				</Col>
 			</Row>
 			<Row>
 				<Col>
-					{/* <UserAuthenticatedComponent> */}
+					<UserAuthenticatedComponent>
 						<CommentForm handleSubmit={props.HandleCommentFormSubmit}/>
 						<FileUploadForm handleSubmit={props.HandleFileUploadSubmit} />
-					{/* </UserAuthenticatedComponent> */}
+					</UserAuthenticatedComponent>
 				</Col>
 			</Row>
 
