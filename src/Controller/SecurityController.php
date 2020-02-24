@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Doctrine\UuidEncoder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,10 +23,40 @@ class SecurityController extends AbstractController{
 	}
 
 	/**
+	 * @Route("/api/v1/login", methods={"POST"})
+	 */
+	public function apiLogin(Request $request, UuidEncoder $encoder)
+    {
+        $user = $this->getUser();
+		if ($user){
+			return $this->json([
+				'username' => $user->getUsername(),
+				'encodedUuid' => $encoder->encode($user->getUuid()),
+				'roles' => $user->getRoles(),
+			]);
+		}
+	
+		return $this->json([
+			'error' => 'user is not authenticated'
+		]);
+    }
+	
+	/**
 	 * @Route("/api/v1/auth", name="react_checker")
 	 */
-	public function reactSimpleAuth(AuthorizationCheckerInterface $auth){
-		// TODO: this should return something unique that cant be spoofed on the client side
-		return new JsonResponse($auth->isGranted('IS_AUTHENTICATED_FULLY'));
+	public function reactSimpleAuth(UuidEncoder $encoder){
+		$user = $this->getUser();
+
+		if ($user){
+			return $this->json([
+				'username' => $user->getUsername(),
+				'encodedUuid' => $encoder->encode($user->getUuid()),
+				'roles' => $user->getRoles(),
+			]);
+		}
+
+		return $this->json([
+			'error' => 'user is not authenticated'
+		]);
 	}
 }
