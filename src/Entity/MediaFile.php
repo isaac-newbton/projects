@@ -39,6 +39,12 @@ class MediaFile
      */
     private $tasks;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="mediaFiles")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
     public function __construct()
     {
         $this->uuid = Uuid::uuid4();
@@ -117,6 +123,18 @@ class MediaFile
             $this->tasks->removeElement($task);
             $task->removeMediaFile($this);
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

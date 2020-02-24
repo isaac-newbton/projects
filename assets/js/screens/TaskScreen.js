@@ -65,7 +65,7 @@ const TaskScreen = props => {
 		})
 		.then(resp => resp.json())
 		.then(resp => {
-			if(!resp.error) fetchTask()
+			!resp.error ? fetchTask() : console.log(resp)
 		})
 	}
 

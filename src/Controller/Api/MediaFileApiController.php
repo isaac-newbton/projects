@@ -1,9 +1,11 @@
 <?php
 namespace App\Controller\Api;
 
+use App\Doctrine\UuidEncoder;
 use App\Entity\MediaFile;
 use App\Repository\MediaFileRepository;
 use App\Repository\TaskRepository;
+use App\Repository\UserRepository;
 use DateTime;
 use DateTimeZone;
 use Exception;
@@ -25,8 +27,7 @@ class MediaFileApiController extends AbstractController {
 		// FIXME: this should be agnostic to the entity
 		if (!$task = $taskRepository->findOneByEncodedUuid($encodedEntityUuid)) return new JsonResponse(['error' => 'task not found']);
 		if (!$files = ($request->files->all())) return new JsonResponse(['error' => 'files required']);
-		// if (!$encodedUserUuid = $this->getUser()->getEncodedUuid()) return new JsonResponse(['error' => 'user is not authenticated']);
-		$encodedUserUuid = 'asdf'; // TODO: remove me before merge - depends on user login
+		if (!$encodedUserUuid = UuidEncoder::encode($this->getUser()->getUuid())) return new JsonResponse(['error' => 'user is not authenticated']);
 		
 		$em = $this->getDoctrine()->getManager();
 		/**
@@ -41,6 +42,7 @@ class MediaFileApiController extends AbstractController {
 			
 			
 			$mediaFile->setName($fileName);
+			$mediaFile->setUser($this->getUser());
 			$mediaFile->addTask($task);
 			$mediaFile->setPath($this->getParameter('mediaFiles_directory').$encodedUserUuid.'/'.$fileName);
 			$mediaFile->setTimestamp(new DateTime('now', new DateTimeZone('AMERICA/NEW_YORK')));

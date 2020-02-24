@@ -61,6 +61,11 @@ class User implements UserInterface
      */
     private $comments;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\MediaFile", mappedBy="user", orphanRemoval=true)
+     */
+    private $mediaFiles;
+
     public function __construct(){
         $this->uuid = Uuid::uuid4();
         $this->projects = new ArrayCollection();
@@ -68,6 +73,7 @@ class User implements UserInterface
         $this->mobileNumberVerified = false;
         $this->tasks = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->mediaFiles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -275,6 +281,37 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($comment->getUser() === $this) {
                 $comment->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|MediaFile[]
+     */
+    public function getMediaFiles(): Collection
+    {
+        return $this->mediaFiles;
+    }
+
+    public function addMediaFile(MediaFile $mediaFile): self
+    {
+        if (!$this->mediaFiles->contains($mediaFile)) {
+            $this->mediaFiles[] = $mediaFile;
+            $mediaFile->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMediaFile(MediaFile $mediaFile): self
+    {
+        if ($this->mediaFiles->contains($mediaFile)) {
+            $this->mediaFiles->removeElement($mediaFile);
+            // set the owning side to null (unless already changed)
+            if ($mediaFile->getUser() === $this) {
+                $mediaFile->setUser(null);
             }
         }
 
