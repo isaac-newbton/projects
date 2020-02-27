@@ -69,7 +69,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $username;
+    private $displayName;
 
     public function __construct(){
         $this->uuid = Uuid::uuid4();
@@ -323,9 +323,14 @@ class User implements UserInterface
         return $this;
     }
 
-    public function setUsername(?string $username): self
+    public function getDisplayName(): ?string
     {
-        $this->username = $username;
+        return $this->displayName;
+    }
+
+    public function setDisplayName(?string $displayName): self
+    {
+        $this->displayName = $displayName;
 
         return $this;
     }
