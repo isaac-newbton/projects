@@ -20,8 +20,10 @@ class UserApiController extends AbstractController{
 	public function create(Request $request, UserRepository $userRepository, UserPasswordService $userPasswordService, UserPasswordEncoderInterface $passwordEncoder, UuidEncoder $uuidEncoder){
 		$email = $request->request->get('email');
 		$mobileNumber = $request->request->get('mobileNumber');
+		$displayName = $request->request->get('displayName');
 		$password = $request->request->get('password');
 		if(!$email && !$mobileNumber) return new JsonResponse(['error'=>'email or number is required'], 400);
+		if ($userRepository->findOneBy(['displayName' => $displayName])) return new JsonResponse(['error' => 'uername is taken'], 400);
 		if(!$password) return new JsonResponse(['error'=>'password is required'], 400);
 
 		if(
@@ -38,6 +40,7 @@ class UserApiController extends AbstractController{
 		$user = new User();
 		$user->setEmail($email ?? null);
 		$user->setMobileNumber($mobileNumber ?? null);
+		$user->setDisplayName($displayName);
 		$user->setPassword($passwordEncoder->encodePassword($user, $password));
 
 		$em = $this->getDoctrine()->getManager();
@@ -96,5 +99,22 @@ class UserApiController extends AbstractController{
 				return new JsonResponse(['error'=>'invalid verification method'], 400);
 		}
 		return new JsonResponse(['verified'=>$user->isVerified()], 200);
+	}
+
+	/**
+	 * @Route("/api/v1/user/search", methods={"POST"})
+	 */
+	public function userSearch(Request $request, UserRepository $userRepository){
+		$data = json_decode($request->getContent());
+		if (!$data->searchValue) return new JsonResponse(['error' => 'search value is required']);
+
+		return new JsonResponse(array_map(function($user){
+			return [
+				'encodedUuid' => UuidEncoder::encode($user->getUuid()),
+				'displayName' => $user->getDisplayName(),
+				'email' => $user->getEmail(),
+				'mobileNumber' => $user->getMobileNumber(),
+			];
+		}, $userRepository->search($data->searchValue)));
 	}
 }

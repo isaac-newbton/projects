@@ -3,10 +3,11 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import CommentForm from '../../components/CommentForm';
-import { ListGroup, Badge, Image, Card } from 'react-bootstrap';
+import { ListGroup, Badge, Image, Card, Button } from 'react-bootstrap';
 import UserAuthenticatedComponent from '../../components/UserAuthenticated';
 import FileUploadForm from '../../components/FileUploadForm';
 import FilesList from '../../components/FilesList';
+import UserSearchForm from '../../components/UserSearchForm';
 
 const EditTask = props => {
 
@@ -20,6 +21,16 @@ const EditTask = props => {
 							{props.task.project.name}
 						</a>
 					</h2>
+				</Col>
+				<Col>
+					{
+						props.task.assignedUser ?
+						<><Button variant="link">&times;</Button>
+							{props.task.assignedUser.displayName
+							?? props.task.assignedUser.email
+							?? props.task.assignedUser.mobileNumber}</>
+							: <UserSearchForm onSelect={props.assignUserHandler} />
+						}
 				</Col>
 			</Row>
 			<Row>

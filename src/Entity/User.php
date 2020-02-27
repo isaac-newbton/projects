@@ -66,6 +66,11 @@ class User implements UserInterface
      */
     private $mediaFiles;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $displayName;
+
     public function __construct(){
         $this->uuid = Uuid::uuid4();
         $this->projects = new ArrayCollection();
@@ -314,6 +319,18 @@ class User implements UserInterface
                 $mediaFile->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDisplayName(): ?string
+    {
+        return $this->displayName;
+    }
+
+    public function setDisplayName(?string $displayName): self
+    {
+        $this->displayName = $displayName;
 
         return $this;
     }

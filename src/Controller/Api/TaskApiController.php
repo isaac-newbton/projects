@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Task;
 use App\Entity\Project;
 use App\Repository\ProjectRepository;
+use App\Repository\UserRepository;
 use Symfony\Component\Finder\Finder;
 
 class TaskApiController extends AbstractController {
@@ -53,6 +54,12 @@ class TaskApiController extends AbstractController {
 			return new JsonResponse([
 				'name'=>$task->getName(),
 				'encodedUuid'=>$encoder->encode($task->getUuid()),
+				'assignedUser' => $task->getAssignedUser() ? [
+					'encodedUuid' => UuidEncoder::encode($task->getAssignedUser()->getUuid()),
+					'displayName' => $task->getAssignedUser()->getDisplayName(),
+					'email' => $task->getAssignedUser()->getEmail(),
+					'mobilePhone' => $task->getAssignedUser()->getMobileNumber(),
+				] : null,
 				'project'=>($project) ? [
 					'name'=>$project->getName(),
 					'dueDate'=>$project->getDueDate(),
@@ -87,6 +94,42 @@ class TaskApiController extends AbstractController {
 	 */
 	public function updateTask(){
 		return new JsonResponse('TODO: update task');
+	}
+
+	/**
+	 * @Route("/api/v1/task/assign/user", methods={"POST"})
+	 */
+	public function assignUser(Request $request, TaskRepository $taskRepository, UserRepository $userRepository){
+		$data = json_decode($request->getContent());
+		if (!$encodedUserUuid = $data->encodedUserUuid) return new JsonResponse(['error' => 'encoded user uuid is required']);
+		if (!$encodedTaskUuid = $data->encodedTaskUuid) return new JsonResponse(['error' => 'encoded task uuid is required']);
+		if (!$task = $taskRepository->findOneByEncodedUuid($encodedTaskUuid)) return new JsonResponse(['error' => 'task not found']);
+		if (!$user = $userRepository->findOneByEncodedUuid($encodedUserUuid)) return new JsonResponse(['error' => 'user not found']);
+
+		$task->setAssignedUser($user);
+		
+		$em = $this->getDoctrine()->getManager();
+		$em->persist($task);
+		$em->merge($user);
+		$em->flush();
+
+		return new JsonResponse(['success'], 200);
+	}
+	/**
+	 * @Route("/api/v1/task/remove/user", methods={"POST"})
+	 */
+	public function removeUser(Request $request, TaskRepository $taskRepository){
+		$data = json_decode($request->getContent());
+		if (!$encodedTaskUuid = $data->encodedTaskUuid) return new JsonResponse(['error' => 'encoded task uuid is required']);
+		if (!$task = $taskRepository->findOneByEncodedUuid($encodedTaskUuid)) return new JsonResponse(['error' => 'task not found']);
+		
+		$task->setAssignedUser(null);
+		
+		$em = $this->getDoctrine()->getManager();
+		$em->persist($task);
+		$em->flush();
+		
+		return new JsonResponse(['success'], 200);
 	}
 
 	/**

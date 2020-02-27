@@ -15,12 +15,14 @@ export default function NewUser() {
 	const [userEmail, setUserEmail] = React.useState('')
 	const [userMobileNumber, setUserMobileNumber] = React.useState('')
 	const [userPassword, setUserPassword] = React.useState('')
+	const [displayName, setDisplayName] = React.useState('')
 
 	const createUser = (e) => {
 		e.preventDefault()
 		let user = new FormData()
 		user.append('email', userEmail)
 		user.append('mobileNumber', userMobileNumber)
+		user.append('displayName', displayName)
 		user.append('password', userPassword)
 		const response = fetch('/api/v1/user/create', {
 			method: 'POST',
@@ -59,6 +61,14 @@ export default function NewUser() {
 									document.getElementById('inputEmail').required = (0==e.target.value.toString().length)
 								}} required={true} />
 								<FormText className="text-muted">Enter your mobile number</FormText>
+							</FormGroup>
+						</Col>
+					</Row>
+					<Row>
+						<Col>
+							<FormGroup>
+								<FormControl type="text" placeholder="Display Name" onChange={(e)=>setDisplayName(e.target.value)} required={true} />
+								<FormText className="text-muted">Enter a display name - This is how others will find you</FormText>
 							</FormGroup>
 						</Col>
 					</Row>
