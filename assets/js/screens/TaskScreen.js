@@ -68,10 +68,27 @@ const TaskScreen = props => {
 			!resp.error ? fetchTask() : console.log(resp)
 		})
 	}
+	
+	
+	const assignUserHandler = user => {
+		if (user.encodedUuid){
+			fetch("/api/v1/task/assign/user", {
+				method: "POST",
+				body: JSON.stringify({
+					encodedUserUuid: user.encodedUuid,
+					encodedTaskUuid: task.encodedUuid
+				})
+			})
+			.then(resp => resp.json())
+			.then(resp => {
+				!resp.error ? fetchTask() : console.log(resp)
+			})
+		}
+	}
 
 	if(isLoading===true) return 'loading...'
 	if(task && 'name' in task){
-		return <EditTask updateTask={updateTaskHandler} task={task} HandleFileUploadSubmit={HandleFileUploadSubmit} HandleCommentFormSubmit={HandleCommentFormSubmit}/>
+		return <EditTask updateTask={updateTaskHandler} task={task} assignUserHandler={assignUserHandler} HandleFileUploadSubmit={HandleFileUploadSubmit} HandleCommentFormSubmit={HandleCommentFormSubmit}/>
 	}
 	return 'TODO: 404 for task'
 }
