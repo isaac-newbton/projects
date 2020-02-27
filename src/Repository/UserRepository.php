@@ -6,6 +6,7 @@ use App\Doctrine\UuidEncoder;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Exception;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -38,6 +39,23 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $user->setPassword($newEncodedPassword);
         $this->_em->persist($user);
         $this->_em->flush();
+    }
+
+    /**
+     * returns all users found from provided search value comparing email, phone and username
+     */
+    public function search(string $searchValue){
+        if (trim($searchValue) === '') throw new Exception("search value cant be empty", 400);
+
+        $qb = $this->createQueryBuilder('user')
+        ->where('user.displayName LIKE :s')
+        ->orWhere('user.email LIKE :s')
+        ->orWhere('user.mobileNumber LIKE :s')
+        ->setParameter('s', '%'.$searchValue.'%');
+
+        $query = $qb->getQuery();
+
+        return $query->execute();
     }
 
     // /**
