@@ -20,8 +20,10 @@ class UserApiController extends AbstractController{
 	public function create(Request $request, UserRepository $userRepository, UserPasswordService $userPasswordService, UserPasswordEncoderInterface $passwordEncoder, UuidEncoder $uuidEncoder){
 		$email = $request->request->get('email');
 		$mobileNumber = $request->request->get('mobileNumber');
+		$username = $request->request->get('username');
 		$password = $request->request->get('password');
 		if(!$email && !$mobileNumber) return new JsonResponse(['error'=>'email or number is required'], 400);
+		if ($userRepository->findOneBy(['username' => $username])) return new JsonResponse(['error' => 'uername is taken'], 400);
 		if(!$password) return new JsonResponse(['error'=>'password is required'], 400);
 
 		if(
@@ -38,6 +40,7 @@ class UserApiController extends AbstractController{
 		$user = new User();
 		$user->setEmail($email ?? null);
 		$user->setMobileNumber($mobileNumber ?? null);
+		$user->setUsername($username);
 		$user->setPassword($passwordEncoder->encodePassword($user, $password));
 
 		$em = $this->getDoctrine()->getManager();

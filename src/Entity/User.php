@@ -66,6 +66,11 @@ class User implements UserInterface
      */
     private $mediaFiles;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $username;
+
     public function __construct(){
         $this->uuid = Uuid::uuid4();
         $this->projects = new ArrayCollection();
@@ -314,6 +319,13 @@ class User implements UserInterface
                 $mediaFile->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function setUsername(?string $username): self
+    {
+        $this->username = $username;
 
         return $this;
     }
