@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types';
 import { Form, ListGroup } from 'react-bootstrap'
 import { useState } from 'react'
-import InviteTaskUser from './InviteTaskUser';
+import InviteUser from './InviteUser';
 
 const UserSearchForm = props => {
 	const [users, setUsers] = useState([])
@@ -31,7 +31,7 @@ const UserSearchForm = props => {
 						</ListGroup.Item>
 					)
 				})
-				: <InviteTaskUser />
+				: <InviteUser />
 			}
 			</ListGroup>
 		</Form>
