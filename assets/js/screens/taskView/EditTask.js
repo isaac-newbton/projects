@@ -25,11 +25,18 @@ const EditTask = props => {
 				<Col>
 					{
 						props.task.assignedUser ?
-						<><Button variant="link">&times;</Button>
+						<>
+						<UserAuthenticatedComponent>
+							<Button variant="link">&times;</Button>
+						</UserAuthenticatedComponent>
 							{props.task.assignedUser.displayName
 							?? props.task.assignedUser.email
-							?? props.task.assignedUser.mobileNumber}</>
-							: <UserSearchForm onSelect={props.assignUserHandler} />
+							?? props.task.assignedUser.mobileNumber}
+						</>
+							: 
+							<UserAuthenticatedComponent>
+								<UserSearchForm onSelect={props.assignUserHandler} />
+							</UserAuthenticatedComponent>
 						}
 				</Col>
 			</Row>
