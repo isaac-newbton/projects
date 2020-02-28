@@ -50,7 +50,6 @@ const EditProject = props => {
 		<Container>
 			<Row>
 				<Col>
-					{/* <h1 contentEditable value={props.project.name} onChange={event => console.log(event)}></h1> */}
 					<Form.Control name="name" onChange={event => props.updateProject(event)} type="text" defaultValue={props.project.name} />
 					<Form.Control name="dueDate" onChange={event => props.updateProject(event)} type="date" defaultValue={props.project.dueDate} />
 				</Col>
@@ -62,7 +61,7 @@ const EditProject = props => {
 							if (task.active){ // TODO: refactor me ...someday
 								return (
 									<div key={task.encodedUuid}>
-										<Task name={task.name} dueDate={task.dueDate} encodedUuid={task.encodedUuid}/>
+										<Task task={task} />
 										<Button variant="danger" onClick={() => deleteTask(task.encodedUuid)} className="">delete</Button>
 									</div>
 								)
