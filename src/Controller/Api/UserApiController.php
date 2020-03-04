@@ -29,12 +29,15 @@ class UserApiController extends AbstractController
 		if (!$data->data->input) return new JsonResponse(['error' => 'invite input is required (mobile number/email address)']);
 
 		$url = "http://{$_SERVER['SERVER_NAME']}/signup";
-		$message = "<h1>You have been invited to the projects app.</h1>";
-		$message .= "<p>Click <a href='{$url}'>here</a> to sign up!</p>";
 
+		// append the task uuid to the url if we have one
 		if ($data->task) {
 			$url .= "?task={$data->task->encodedUuid}";
 		}
+
+		$message = "<h1>You have been invited to the projects app.</h1>";
+		$message .= "<p>Click <a href='{$url}'>here</a> to sign up!</p>";
+
 
 		if ($data->data->type == 'tel') {
 			$response = $sms->sendSMS($data->data->input, "$url");
