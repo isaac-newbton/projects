@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types';
 import { Form, ListGroup } from 'react-bootstrap'
 import { useState } from 'react'
+import InviteUser from './InviteUser';
 
 const UserSearchForm = props => {
 	const [users, setUsers] = useState([])
@@ -20,20 +21,20 @@ const UserSearchForm = props => {
 	const handleSelect = user => props.onSelect(user)
 
 	return (
-		<>
 		<Form>
-			<Form.Control type="text" placeholder="Search users" onChange={e => searchUsers(e.target.value)}/>
+			<Form.Control type="search" placeholder="Search users" onChange={e => searchUsers(e.target.value)}/>
+			<ListGroup>
+				{ users.length > 0 ? users.map((user, index) => {
+					return (
+						<ListGroup.Item key={index} onClick={() => handleSelect(user)}>
+							{ user.displayName ?? user.email ?? user.mobileNumber }
+						</ListGroup.Item>
+					)
+				})
+				: <InviteUser />
+			}
+			</ListGroup>
 		</Form>
-		<ListGroup>
-			{users.map((user, index) => {
-				return (
-					<ListGroup.Item key={index} onClick={() => handleSelect(user)}>
-						{ user.displayName ?? user.email ?? user.mobileNumber }
-					</ListGroup.Item>
-				)
-			})}
-		</ListGroup>
-		</>
 	)
 }
 
