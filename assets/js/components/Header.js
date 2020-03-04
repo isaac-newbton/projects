@@ -6,7 +6,7 @@ const Header = props => {
 		return props.user ? (
 			<Nav.Link href='/logout'>Logout</Nav.Link>
 		) : (
-			<Nav.Link href='logout'>Login</Nav.Link>
+			<Nav.Link href='/login'>Login</Nav.Link>
 		);
 	};
 	return (

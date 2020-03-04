@@ -42,6 +42,7 @@ const EditTask = props => {
 						<UserAuthenticatedComponent>
 							<UserSearchForm
 								onSelect={props.assignUserHandler}
+								handleInvite={props.handleInvite}
 							/>
 						</UserAuthenticatedComponent>
 					)}

@@ -54,9 +54,10 @@ const App = () => {
 					<Route exact path='/'>
 						<NewProject />
 					</Route>
-					<Route path='/signup'>
-						<NewUser />
-					</Route>
+					<Route
+						path='/signup'
+						component={!user ? NewUser : NewProject}
+					/>
 					<Route path='/login'>
 						{user ? (
 							<Redirect to='/' />

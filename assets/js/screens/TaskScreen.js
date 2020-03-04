@@ -75,6 +75,22 @@ const TaskScreen = props => {
 			});
 	};
 
+	const handleInvite = data => {
+		fetch('/api/v1/user/invite', {
+			method: 'POST',
+			body: JSON.stringify({
+				task: task,
+				data: data,
+			}),
+		})
+			.then(resp => resp.json())
+			.then(resp => {
+				if (!resp.error) {
+					console.log(resp);
+				}
+			});
+	};
+
 	const assignUserHandler = user => {
 		if (user.encodedUuid) {
 			fetch('/api/v1/task/assign/user', {
@@ -109,6 +125,7 @@ const TaskScreen = props => {
 	if (task && 'name' in task) {
 		return (
 			<EditTask
+				handleInvite={handleInvite}
 				updateTask={updateTaskHandler}
 				task={task}
 				removeUserHandler={removeUserHandler}
