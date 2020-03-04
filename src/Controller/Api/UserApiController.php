@@ -6,6 +6,8 @@ use App\Doctrine\UuidEncoder;
 use App\Entity\User;
 use App\Repository\TaskRepository;
 use App\Repository\UserRepository;
+use App\Service\Email\EmailServiceHandler;
+use App\Service\SMS\SMSHandler;
 use App\Service\UserPasswordService;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -16,6 +18,37 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserApiController extends AbstractController
 {
+
+	/**
+	 * @Route("/api/v1/user/invite")
+	 */
+	public function userInvite(Request $request, SMSHandler $sms, EmailServiceHandler $emailServiceHandler)
+	{
+		$data = json_decode($request->getContent());
+		if (!$data->data->type) return new JsonResponse(['error' => 'invite type is required (tel/email)']);
+		if (!$data->data->input) return new JsonResponse(['error' => 'invite input is required (mobile number/email address)']);
+
+		$url = "http://{$_SERVER['SERVER_NAME']}/signup";
+		$message = "<h1>You have been invited to the projects app.</h1>";
+		$message .= "<p>Click <a href='{$url}'>here</a> to sign up!</p>";
+
+		if ($data->task) {
+			$url .= "?task={$data->task->encodedUuid}";
+		}
+
+		if ($data->data->type == 'tel') {
+			$response = $sms->sendSMS($data->data->input, "$url");
+			return new JsonResponse(['success', 'msg' => 'SMS sent'], 200);
+		}
+
+		if ($data->data->type == 'email') {
+			$response = $emailServiceHandler->sendEmail([$data->data->input], null, null, "You've been invited!", "invite.html.twig", ['message' => $message]);
+			return new JsonResponse(['success', 'msg' => 'email sent'], 200);
+		}
+
+		// we didnt do anything
+		return new JsonResponse(['error' => 'Other error, message not sent'], 500);
+	}
 
 	/**
 	 * @Route("/api/v1/user/create", methods={"POST"})
