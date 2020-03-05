@@ -60,6 +60,12 @@ class ProjectApiController extends AbstractController {
 						"dueDate" => $task->getDueDate() ? $task->getDueDate()->format('y-m-d') : null,
 						"encodedUuid" => $encoder->encode($task->getUuid()),
 						"active" => !$task->getDeleted() ? true : false,
+						'assignedUser' => $task->getAssignedUser() ? [
+							'encodedUuid' => UuidEncoder::encode($task->getAssignedUser()->getUuid()),
+							'displayName' => $task->getAssignedUser()->getDisplayName(),
+							'email' => $task->getAssignedUser()->getEmail(),
+							'mobilePhone' => $task->getAssignedUser()->getMobileNumber(),
+						] : null,
 					];
 				}, $project->getTasks()->getValues())
 			]);

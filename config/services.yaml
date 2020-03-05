@@ -4,9 +4,13 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+<<<<<<< HEAD
     app_name: 'lifeprojX (BETA)'
     app_mailgun_api_key: '287c115daacc77b92679a42a19c1b7db-af6c0cec-aebd1e22'
     app_mailgun_domain: 'mail.lifeprojex.com'
+=======
+    mediaFiles_directory: '../var/files/'
+>>>>>>> master
 
 services:
     # default configuration for services in *this* file

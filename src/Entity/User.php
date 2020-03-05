@@ -61,6 +61,16 @@ class User implements UserInterface
      */
     private $comments;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\MediaFile", mappedBy="user", orphanRemoval=true)
+     */
+    private $mediaFiles;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $displayName;
+
     public function __construct(){
         $this->uuid = Uuid::uuid4();
         $this->projects = new ArrayCollection();
@@ -68,6 +78,7 @@ class User implements UserInterface
         $this->mobileNumberVerified = false;
         $this->tasks = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->mediaFiles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -277,6 +288,49 @@ class User implements UserInterface
                 $comment->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|MediaFile[]
+     */
+    public function getMediaFiles(): Collection
+    {
+        return $this->mediaFiles;
+    }
+
+    public function addMediaFile(MediaFile $mediaFile): self
+    {
+        if (!$this->mediaFiles->contains($mediaFile)) {
+            $this->mediaFiles[] = $mediaFile;
+            $mediaFile->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMediaFile(MediaFile $mediaFile): self
+    {
+        if ($this->mediaFiles->contains($mediaFile)) {
+            $this->mediaFiles->removeElement($mediaFile);
+            // set the owning side to null (unless already changed)
+            if ($mediaFile->getUser() === $this) {
+                $mediaFile->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getDisplayName(): ?string
+    {
+        return $this->displayName;
+    }
+
+    public function setDisplayName(?string $displayName): self
+    {
+        $this->displayName = $displayName;
 
         return $this;
     }
