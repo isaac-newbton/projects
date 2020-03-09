@@ -8,6 +8,7 @@ const InviteUser = props => {
 	const [type, setType] = useState('tel');
 
 	const [input, setInput] = useState('');
+	const [isDisabled, setIsDisabled] = useState('');
 
 	const parseInputType = () => (type == 'email' ? '✉' : '📞');
 
@@ -17,7 +18,10 @@ const InviteUser = props => {
 
 	const handleSubmit = e => {
 		e.preventDefault();
-		if (input.trim() !== '') props.onSubmit({ input, type });
+		if (input.trim() !== '') {
+			setIsDisabled(true);
+			props.onSubmit({ input, type });
+		}
 	};
 
 	return (
@@ -44,10 +48,15 @@ const InviteUser = props => {
 							/>
 
 							<InputGroup.Append>
-								<Form.Control type='submit' value='Invite' />
+								<Form.Control
+									type='submit'
+									disabled={isDisabled}
+									value='Invite'
+								/>
 							</InputGroup.Append>
 						</InputGroup>
 					</Form>
+					{props.responseMessage}
 				</Modal.Body>
 			</Modal>
 		</>
@@ -59,11 +68,13 @@ InviteUser.propTypes = {
 	 * Handles the submit of the invie user form, passing the data to the provided function
 	 */
 	onSubmit: PropTypes.func,
+	responseMessage: PropTypes.string,
 };
 
 InviteUser.defaultProps = {
 	onSubmit: input =>
 		console.log("onSubmit prop not defined, here's the data ", input),
+	responseMessage: '',
 };
 
 export default InviteUser;

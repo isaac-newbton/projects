@@ -75,7 +75,9 @@ const TaskScreen = props => {
 			});
 	};
 
+	const [inviteResponseMessage, setInviteResponseMessage] = useState('');
 	const handleInvite = data => {
+		setInviteResponseMessage('sending invitation...');
 		fetch('/api/v1/user/invite', {
 			method: 'POST',
 			body: JSON.stringify({
@@ -87,6 +89,10 @@ const TaskScreen = props => {
 			.then(resp => {
 				if (!resp.error) {
 					console.log(resp);
+					setInviteResponseMessage('invitation sent!');
+				} else {
+					console.log(resp);
+					setInviteResponseMessage(resp.error);
 				}
 			});
 	};
@@ -125,6 +131,7 @@ const TaskScreen = props => {
 	if (task && 'name' in task) {
 		return (
 			<EditTask
+				responseMessage={inviteResponseMessage}
 				handleInvite={handleInvite}
 				updateTask={updateTaskHandler}
 				task={task}
