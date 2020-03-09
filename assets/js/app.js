@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import LogIn from './screens/LogIn';
 import Header from './components/Header';
 import ProjectsListScreen from './screens/ProjectsListScreen';
+import TaskListScreen from './screens/TaskListScreen';
 
 const App = () => {
 	const [user, setUser] = useState(null);
@@ -71,6 +72,13 @@ const App = () => {
 							<LogIn handleLogin={handleLogin} />
 						) : (
 							<ProjectsListScreen user={user} />
+						)}
+					</Route>
+					<Route path='/tasks'>
+						{!user ? (
+							<LogIn handleLogin={handleLogin} />
+						) : (
+							<TaskListScreen user={user} />
 						)}
 					</Route>
 					<Route path='/logout'>
