@@ -81,8 +81,8 @@ class UserApiController extends AbstractController
 		}
 
 		$user = new User();
-		isset($email) ?? $user->setEmail($email);
-		isset($mobileNumber) ?? $user->setMobileNumber($mobileNumber);
+		if ($email) $user->setEmail($email);
+		if ($mobileNumber) $user->setMobileNumber($mobileNumber);
 		$user->setDisplayName($displayName);
 		$user->setPassword($passwordEncoder->encodePassword($user, $password));
 
