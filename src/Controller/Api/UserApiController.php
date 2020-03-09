@@ -58,14 +58,14 @@ class UserApiController extends AbstractController
 	 */
 	public function create(Request $request, UserRepository $userRepository, UserPasswordService $userPasswordService, UserPasswordEncoderInterface $passwordEncoder, UuidEncoder $uuidEncoder, TaskRepository $taskRepository)
 	{
-		$email = trim($request->request->get('email'));
-		$mobileNumber = trim($request->request->get('mobileNumber'));
-		$displayName = trim($request->request->get('displayName'));
+		$email = trim($request->request->get('email')) !== '' ? trim($request->request->get('email')) : null;
+		$mobileNumber = trim($request->request->get('mobileNumber')) !== '' ? trim($request->request->get('mobileNumber')) : null;
+		$displayName = trim($request->request->get('displayName')) !== '' ? trim($request->request->get('displayName')) : null;
 		$password = trim($request->request->get('password'));
 		$encodedTaskUuid = trim($request->request->get('encodedTaskUuid'));
 
-		if ((!$email || $email == '') && (!$mobileNumber || $mobileNumber == '')) return new JsonResponse(['error' => 'email or number is required'], 400);
-		if (!$displayName || $displayName == '') return new JsonResponse(['error' => 'display name is required'], 400);
+		if ((!$email) && (!$mobileNumber)) return new JsonResponse(['error' => 'email or number is required'], 400);
+		if (!$displayName) return new JsonResponse(['error' => 'display name is required'], 400);
 		if ($userRepository->findOneBy(['displayName' => $displayName])) return new JsonResponse(['error' => 'uername is taken'], 400);
 		if (!$password || trim($password) === '') return new JsonResponse(['error' => 'password is required'], 400);
 
@@ -81,8 +81,8 @@ class UserApiController extends AbstractController
 		}
 
 		$user = new User();
-		$user->setEmail($email);
-		$user->setMobileNumber($mobileNumber);
+		isset($email) ?? $user->setEmail($email);
+		isset($mobileNumber) ?? $user->setMobileNumber($mobileNumber);
 		$user->setDisplayName($displayName);
 		$user->setPassword($passwordEncoder->encodePassword($user, $password));
 
