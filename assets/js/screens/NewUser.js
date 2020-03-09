@@ -19,6 +19,7 @@ export default function NewUser(props) {
 	const [userPassword, setUserPassword] = React.useState('');
 	const [displayName, setDisplayName] = React.useState('');
 	const [encodedTaskUuid, setEncodedTaskUuid] = React.useState(params.task);
+	const [message, setMessage] = React.useState('');
 
 	const createUser = e => {
 		e.preventDefault();
@@ -36,6 +37,7 @@ export default function NewUser(props) {
 			.then(j => {
 				console.log(j);
 				if (j.user) {
+					setMessage('Success!');
 					//worked
 				}
 			});
@@ -139,6 +141,7 @@ export default function NewUser(props) {
 								Sign up
 							</Button>
 						</Col>
+						<Col>{message}</Col>
 					</Row>
 				</Form>
 			</Container>
