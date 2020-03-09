@@ -30,6 +30,7 @@ const Header = props => {
 							View List
 						</NavDropdown.Item>
 					</NavDropdown>
+					<Nav.Link href='/tasks'>Tasks</Nav.Link>
 				</Nav>
 				<Nav>
 					<AccountLink />
