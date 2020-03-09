@@ -37,7 +37,12 @@ export default function NewUser(props) {
 			.then(j => {
 				console.log(j);
 				if (j.user) {
-					setMessage('Success!');
+					setMessage(
+						<>
+							<h5>Success!</h5>
+							<a href='/login'>Login</a>
+						</>,
+					);
 					//worked
 				}
 			});
@@ -141,6 +146,8 @@ export default function NewUser(props) {
 								Sign up
 							</Button>
 						</Col>
+					</Row>
+					<Row>
 						<Col>{message}</Col>
 					</Row>
 				</Form>
