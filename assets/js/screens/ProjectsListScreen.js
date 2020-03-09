@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ListGroup } from 'react-bootstrap';
+import { ListGroup, Container, Row, Col } from 'react-bootstrap';
 
 const ProjectsListScreen = props => {
 	const [projects, setProjects] = useState([]);
@@ -13,7 +13,6 @@ const ProjectsListScreen = props => {
 		})
 			.then(resp => resp.json())
 			.then(resp => {
-				console.log(resp);
 				!resp.error ? setProjects(resp) : console.log(resp);
 			});
 	};
@@ -23,14 +22,32 @@ const ProjectsListScreen = props => {
 	}, []);
 
 	return (
-		<ListGroup>
-			{projects.map(project => {
-				<ListGroup.Item>
-					<h5>{project.name}</h5>
-					<p>{project.due}</p>
-				</ListGroup.Item>;
-			})}
-		</ListGroup>
+		<Container>
+			<Row>
+				<Col>
+					<ListGroup>
+						{projects.map((project, index) => {
+							return (
+								<ListGroup.Item key={index}>
+									<h5>
+										<a
+											href={`${window.location.origin}/project/${project.encodedUuid}`}
+										>
+											{project.name}
+										</a>
+									</h5>
+									<p>
+										{project.dueDate
+											? `Due: ${project.dueDate}`
+											: null}
+									</p>
+								</ListGroup.Item>
+							);
+						})}
+					</ListGroup>
+				</Col>
+			</Row>
+		</Container>
 	);
 };
 
