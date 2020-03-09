@@ -47,7 +47,10 @@ const UserSearchForm = props => {
 						);
 					})
 				) : (
-					<InviteUser onSubmit={handleInvite} />
+					<InviteUser
+						onSubmit={handleInvite}
+						responseMessage={props.responseMessage}
+					/>
 				)}
 			</ListGroup>
 		</Form>
